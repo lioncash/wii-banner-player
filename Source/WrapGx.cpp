@@ -741,7 +741,7 @@ void GX_LoadTexObj(GXTexObj* obj, u8 mapid)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wraps[txobj.wrap_t & 0x3]);
 
 	// texture filter
-	const GLint filters[] =
+	static const GLint filters[] =
 	{
 		GL_NEAREST,
 		GL_LINEAR,
