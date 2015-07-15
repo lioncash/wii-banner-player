@@ -223,16 +223,16 @@ void Layout::Load(std::istream& file)
 
 Layout::~Layout()
 {
-	foreach (Pane* pane, panes)
+	for (Pane* pane : panes)
 		delete pane;
 
-	foreach (Material* material, resources.materials)
+	for (Material* material : resources.materials)
 		delete material;
 
-	foreach (Texture* texture, resources.textures)
+	for (Texture* texture : resources.textures)
 		delete texture;
 
-	foreach (Font* font, resources.fonts)
+	for (Font* font : resources.fonts)
 		delete font;
 }
 
@@ -254,7 +254,7 @@ void Layout::Render(float aspect_ratio, float zoom) const
 
 	//glScalef(zoom, zoom, 1.f);
 
-	foreach (Pane* pane, panes)
+	for (Pane* pane : panes)
 		pane->Render(resources, 0xff, adjust);
 
 	glPopMatrix();
@@ -268,10 +268,10 @@ void Layout::SetFrame(FrameNumber frame_number)
 	if (key_set)
 		frame_number -= frame_loop_start;
 
-	foreach (Pane* pane, panes)
+	for (Pane* pane : panes)
 		pane->SetFrame(frame_number, key_set);
 
-	foreach (Material* material, resources.materials)
+	for (Material* material : resources.materials)
 		material->SetFrame(frame_number, key_set);
 }
 
@@ -291,13 +291,13 @@ void Layout::SetLanguage(const std::string& language)
 	// TODO: i'd like an empty language to unhide everything, maybe
 
 	// hide panes of non-matching languages
-	foreach (auto& group, groups["RootGroup"].groups)
+	for (auto& group : groups["RootGroup"].groups)
 	{
 		// some hax, there are some odd "Rso0" "Rso1" groups that shouldn't be hidden
 		// only the 3 character language groups should be
 		if (group.first != language && group.first.length() == 3)
 		{
-			foreach (auto& pane, group.second.panes)
+			for (auto& pane : group.second.panes)
 			{
 				Pane* const found = FindPane(pane);
 				if (found)
@@ -307,7 +307,7 @@ void Layout::SetLanguage(const std::string& language)
 	}
 
 	// unhide panes of matching language, some banners list language specific panes in multiple language groups
-	foreach (auto& pane, groups["RootGroup"].groups[language].panes)
+	for (auto& pane : groups["RootGroup"].groups[language].panes)
 	{
 		Pane* const found = FindPane(pane);
 		if (found)
@@ -319,7 +319,7 @@ Pane* Layout::FindPane(const std::string& find_name)
 {
 	Pane* found = nullptr;
 
-	foreach (Pane* pane, panes)
+	for (Pane* pane : panes)
 	{
 		found = pane->FindPane(find_name);
 		if (found)
@@ -331,7 +331,7 @@ Pane* Layout::FindPane(const std::string& find_name)
 
 Material* Layout::FindMaterial(const std::string& find_name)
 {
-	foreach (Material* material, resources.materials)
+	for (Material* material : resources.materials)
 	{
 		if (find_name == material->GetName())
 			return material;

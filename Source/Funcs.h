@@ -24,17 +24,6 @@ distribution.
 #ifndef WII_BNR_FUNCS_H_
 #define WII_BNR_FUNCS_H_
 
-#include <boost/foreach.hpp>
-
-// TODO: eliminate this, "for each in" sucks
-#ifdef _WIN32
-// some silly vc++ crap
-#define foreach(e, c) for each (e in c)
-#else
-// c++0x range-based for loop
-#define foreach(e, c) BOOST_FOREACH (e, c)
-#endif
-
 #include "Endian.h"
 
 template <typename C, typename F>

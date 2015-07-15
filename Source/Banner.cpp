@@ -223,7 +223,7 @@ Layout* Banner::LoadLayout(const std::string& lyt_name, std::streamoff offset, V
 	layout->SetHeight(size.y);
 
 	// load textures
-	foreach (Texture* texture, layout->resources.textures)
+	for (Texture* texture : layout->resources.textures)
 	{
 		auto const texture_offset = bin_arc.GetFileOffset("arc/timg/" + texture->GetName());
 		if (texture_offset)
@@ -239,7 +239,7 @@ Layout* Banner::LoadLayout(const std::string& lyt_name, std::streamoff offset, V
 	std::ifstream font_file("00000003.app", std::ios::binary | std::ios::in);
 	DiscIO::CARCFile font_arc(font_file);
 
-	foreach (Font* font, layout->resources.fonts)
+	for (Font* font : layout->resources.fonts)
 	{
 		auto const font_offset = font_arc.GetFileOffset(font->GetName());
 

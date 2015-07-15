@@ -515,7 +515,7 @@ void CompiledTevStages::Compile(const TevStages& stages)
 
 	frag_ss << "const vec3 comp16 = vec3(1.0, 255.0, 0.0), comp24 = vec3(1.0, 255.0, 255.0 * 255.0);";
 
-	foreach (auto& stage, stages)
+	for (auto& stage : stages)
 	{
 		// current texture color
 		// 0xff is a common value for a disabled texture

@@ -295,7 +295,7 @@ void Material::Apply(const TextureList& textures) const
 	// bind textures
 	{
 	unsigned int i = 0;
-	foreach (auto& tr, texture_maps)
+	for (auto& tr : texture_maps)
 	{
 		if (tr.tex_index < textures.size())
 		{
@@ -313,7 +313,7 @@ void Material::Apply(const TextureList& textures) const
 	glMatrixMode(GL_TEXTURE);
 	{
 	unsigned int i = 0;
-	foreach (auto& tcg, texture_coord_gens)
+	for (auto& tcg : texture_coord_gens)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		glLoadIdentity();
@@ -348,7 +348,7 @@ void Material::Apply(const TextureList& textures) const
 	// tev stages
 	{
 	int i = 0;
-	foreach (auto& ts, tev_stages)
+	for (auto& ts : tev_stages)
 	{
 		GX_SetTevOrder(i, ts.tex_coord, ts.tex_map, ts.color);
 		GX_SetTevSwapMode(i, ts.ras_sel, ts.tex_sel);

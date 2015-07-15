@@ -80,7 +80,7 @@ void Textbox::Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) co
 
 	glColor4ub(colors[0].r, colors[0].g, colors[0].b, MultiplyColors(colors[0].a, render_alpha));
 
-	foreach (wchar_t c, text)
+	for (wchar_t c : text)
 	{
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.f, 0.f);

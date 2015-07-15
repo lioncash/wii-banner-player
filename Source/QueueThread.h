@@ -145,14 +145,14 @@ private:
 //
 //	~ThreadPool()
 //	{
-//		foreach (auto& job_queue, job_queues)
+//		for (auto& job_queue : job_queues)
 //		{
 //			job_queue.second.lock.Enter();
 //			job_queue.second.queue.push_back(nullptr);
 //			job_queue.second.lock.Leave();
 //		}
 //
-//		foreach (auto& job_queue, job_queues)
+//		for (auto& job_queue : job_queues)
 //		{
 //			job_queue.second.thread->WaitForDeath();
 //			delete job_queue.second.thread;

@@ -52,7 +52,7 @@ void Pane::Load(std::istream& file)
 Pane::~Pane()
 {
 	// delete children
-	foreach (Pane* pane, panes)
+	for (Pane* pane : panes)
 		delete pane;
 }
 
@@ -62,7 +62,7 @@ void Pane::SetFrame(FrameNumber frame, u8 key_set)
 	Animator::SetFrame(frame, key_set);
 
 	// setframe on children
-	foreach (Pane* pane, panes)
+	for (Pane* pane : panes)
 		pane->SetFrame(frame, key_set);
 }
 
@@ -97,7 +97,7 @@ void Pane::Render(const Resources& resources, u8 parent_alpha, Vec2f adjust) con
 	Draw(resources, render_alpha, adjust);
 
 	// render children
-	foreach (Pane* pane, panes)
+	for (Pane* pane : panes)
 		pane->Render(resources, render_alpha, adjust);
 
 	glPopMatrix();
@@ -110,7 +110,7 @@ Pane* Pane::FindPane(const std::string& find_name)
 
 	Pane* found = nullptr;
 
-	foreach (Pane* pane, panes)
+	for (Pane* pane : panes)
 	{
 		found = pane->FindPane(find_name);
 		if (found)
@@ -207,7 +207,7 @@ void Quad::Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const
 		else
 		{
 			GLenum target = GL_TEXTURE0;
-			foreach (auto& tc, tex_coords)
+			for (auto& tc : tex_coords)
 				glMultiTexCoord2fv(target++, &tc.coords[v].s);
 		}
 

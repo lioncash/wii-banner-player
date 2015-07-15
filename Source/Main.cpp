@@ -201,7 +201,7 @@ Tile* FindTile(const Vec2i& pos)
 
 	std::lock_guard<std::mutex> lk(g_tiles_lock);
 
-	foreach (Tile* tile, g_tiles)
+	for (Tile* tile : g_tiles)
 	{
 		if (tile->position == pos)
 		{
@@ -467,7 +467,7 @@ int main(int argc, char* argv[])
 				case sf::Keyboard::Back:
 					g_worker.Clear();
 					full_banner = nullptr;
-					foreach (Tile* tile, g_tiles)
+					for (Tile* tile : g_tiles)
 						delete tile;
 					g_tiles.clear();
 					load_tiles();
@@ -524,7 +524,7 @@ int main(int argc, char* argv[])
 		else
 		{
 			// draw icons
-			foreach (Tile* tile, g_tiles)
+			for (Tile* tile : g_tiles)
 			{
 				if (tile != tile_selected)
 					if (tile->banner)
@@ -536,7 +536,7 @@ int main(int argc, char* argv[])
 
 			if (banner_play)
 			{
-				foreach (Tile* tile, g_tiles)
+				for (Tile* tile : g_tiles)
 					if (tile->banner)
 						tile->banner->GetIcon()->AdvanceFrame();
 			}
@@ -573,6 +573,6 @@ int main(int argc, char* argv[])
 	//g_worker.Clear();
 
 	// cleanup
-	foreach (Tile* tile, g_tiles)
+	for (Tile* tile : g_tiles)
 		delete tile;
 }

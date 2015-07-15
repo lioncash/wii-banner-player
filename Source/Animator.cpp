@@ -77,7 +77,7 @@ void Animator::LoadKeyFrames(std::istream& file, u8 tag_count, std::streamoff or
 
 void Animator::SetFrame(FrameNumber frame_number, u8 key_set)
 {
-	foreach (auto& frame_handler, keys[key_set].hermite_keys)
+	for (auto& frame_handler : keys[key_set].hermite_keys)
 	{
 		const auto& frame_type = frame_handler.first;
 		const auto frame_value = frame_handler.second.GetFrame(frame_number);
@@ -85,7 +85,7 @@ void Animator::SetFrame(FrameNumber frame_number, u8 key_set)
 		ProcessHermiteKey(frame_type, frame_value);
 	}
 
-	foreach (auto& frame_handler, keys[key_set].step_keys)
+	for (auto& frame_handler : keys[key_set].step_keys)
 	{
 		const auto& frame_type = frame_handler.first;
 		auto const frame_data = frame_handler.second.GetFrame(frame_number);
