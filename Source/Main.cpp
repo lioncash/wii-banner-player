@@ -236,7 +236,7 @@ void LoadTile(const std::string& fname)
 
 			AddTile(tile);
 
-			// this sleep just makes it look cool :p
+			// This sleep just makes it look cool :p
 			//std::this_thread::sleep_for(std::chrono::milliseconds(50));
 		}
 		else
@@ -461,7 +461,7 @@ int main(int argc, char* argv[])
 			case sf::Event::KeyPressed:
 				switch (ev.Key.Code)
 				{
-					// reload all tiles
+					// Reload all tiles
 				case sf::Keyboard::Back:
 					g_worker.Clear();
 					full_banner = nullptr;
@@ -471,12 +471,12 @@ int main(int argc, char* argv[])
 					load_tiles();
 					break;
 
-					// pause resume playback
+					// Pause resume playback
 				case sf::Keyboard::Space:
 					banner_play ^= true;
 					break;
 
-					// exit app
+					// Exit app
 				case sf::Keyboard::Escape:
 					window.Close();
 					break;
@@ -511,7 +511,7 @@ int main(int argc, char* argv[])
 
 			// TODO: don't need to push everything
 			glPushAttrib(-1);
-			full_banner->GetBanner()->Render(render_aspect, 608.f / (608 - 12));	// crop off a bit
+			full_banner->GetBanner()->Render(render_aspect, 608.f / (608 - 12));	 // Crop off a bit
 			glPopAttrib();
 
 			DrawBannerBorder(/*608.f * render_aspect / min_aspect*/);
@@ -551,7 +551,7 @@ int main(int argc, char* argv[])
 		static sf::Clock clock;
 		static float sleep_time = 1.f / desired_fps;
 
-		if (10 == frame_count)
+		if (frame_count == 10)
 		{
 			sleep_time = (1.f / desired_fps) - (clock.GetElapsedTime() / frame_count - sleep_time);
 
@@ -561,7 +561,9 @@ int main(int argc, char* argv[])
 			clock.Reset();
 		}
 		else
+		{
 			++frame_count;
+		}
 
 		// TODO: fix
 		sf::Sleep(1000 / 60);

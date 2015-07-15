@@ -31,7 +31,8 @@ namespace WiiBanner
 
 void Window::Load(std::istream& file)
 {
-	const std::streamoff section_start = file.tellg() - (std::streamoff)8;	// 8 being size of section header :/
+	// 8 being size of section header :/
+	const std::streamoff section_start = file.tellg() - (std::streamoff)8;
 
 	Pane::Load(file);
 
@@ -46,11 +47,11 @@ void Window::Load(std::istream& file)
 
 	file >> BE >> content_offset >> frame_table_offset;
 
-	// read content
+	// Read content
 	file.seekg(section_start + content_offset, std::ios::beg);
 	Quad::Load(file);
 
-	// read frames
+	// Read frames
 	file.seekg(section_start + frame_table_offset, std::ios::beg);
 	ReadOffsetList<u32>(file, frame_count, file.tellg(), [&]
 	{

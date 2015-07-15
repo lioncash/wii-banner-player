@@ -28,15 +28,15 @@ distribution.
 #include <iostream>
 #include <map>
 #include <set>
-#include <vector>
 #include <sstream>
+#include <vector>
 
 // from dolphin
 #include "TextureDecoder.h"
 
+#include "Funcs.h"
 #include "WrapGx.h"
 
-#include "Funcs.h"
 
 static u8 g_texture_decode_buffer[1024 * 1024 * 4];
 
@@ -47,7 +47,7 @@ static const GLuint g_texmap_start_index = 1;
 
 //static GLuint g_clip_texture;
 
-// silly
+// Silly
 GXFifoObj* GX_Init(void* base, u32 size)
 {
 	glewInit();
@@ -85,7 +85,7 @@ struct GLTexObj
 {
 	void* img_ptr;
 
-	mutable GLuint tex; // ugly
+	mutable GLuint tex; // Ugly
 
 	u16 wd, ht;
 	u8 fmt;
@@ -102,14 +102,16 @@ struct GLTexObj
 
 	bool operator<(const GLTexObj& rhs) const
 	{
-		// this is probably good enough
+		// This is probably good enough
 		return img_ptr < rhs.img_ptr;
 	}
 
 	void Bind() const
 	{
 		if (tex)
+		{
 			glBindTexture(GL_TEXTURE_2D, tex);
+		}
 		else
 		{
 			glGenTextures(1, &tex);
@@ -120,16 +122,16 @@ struct GLTexObj
 
 			GLenum gl_format, gl_iformat, gl_type = 0;
 
-			// copy palette data
+			// Copy palette data
 			const auto& tlut = g_tlut_names[tlut_name];
 			if (tlut.lut)
 				memcpy(texMem, tlut.lut, tlut.entries * 2);
 
-			// decode texture
+			// Decode texture
 			auto const pcfmt = TexDecoder_Decode(g_texture_decode_buffer,
 				reinterpret_cast<u8*>(img_ptr), expanded_width, expanded_height, fmt, 0, tlut.fmt);
 
-			// load texture
+			// Load texture
 			switch (pcfmt)
 			{
 			default:
@@ -236,7 +238,7 @@ void GX_InitTexObj(GXTexObj* obj, void* img_ptr, u16 wd, u16 ht, u8 fmt, u8 wrap
 	txobj.wrap_s = wrap_s;
 	txobj.wrap_t = wrap_t;
 
-	// hax, invalidate cache entry
+	// TODO: FIXME: Hax, invalidate cache entry
 	g_texture_cache.erase(txobj);
 
 	// generate texture
@@ -252,7 +254,7 @@ void GX_InitTexObj(GXTexObj* obj, void* img_ptr, u16 wd, u16 ht, u8 fmt, u8 wrap
 	// TODO: ?
 	//edge_lod
 	//lod_bias
-	//wrap_s // these 2 are handled by the materials values
+	//wrap_s // These 2 are handled by the materials values
 	//wrap_t
 
 	//GX_InitTexObjWrapMode(obj, wrap_s, wrap_t);
@@ -278,7 +280,7 @@ void GX_SetBlendMode(u8 type, u8 src_fact, u8 dst_fact, u8 op)
 {
 	static const GLenum blend_types[] =
 	{
-		0, // none
+		0, // None
 		GL_FUNC_ADD,
 		GL_FUNC_REVERSE_SUBTRACT, // LOGIC??
 		GL_FUNC_SUBTRACT,
@@ -364,25 +366,25 @@ struct TevStageProps
 	{
 	}
 
-	// color inputs
+	// Color inputs
 	u8 color_a : 4;
 	u8 color_b : 4;
 
 	u8 color_c : 4;
 	u8 color_d : 4;
 
-	// alpha inputs
+	// Alpha inputs
 	u8 alpha_a : 4;
 	u8 alpha_b : 4;
 
 	u8 alpha_c : 4;
 	u8 alpha_d : 4;
 
-	// tevops
+	// TEV ops
 	u8 color_op : 4;
 	u8 alpha_op : 4;
 
-	// outputs
+	// Outputs
 	u8 color_regid : 1;
 	u8 alpha_regid : 1;
 	u8 pad : 6;
@@ -459,15 +461,14 @@ void CompiledTevStages::Enable()
 
 void CompiledTevStages::Compile(const TevStages& stages)
 {
-	// w.e good for now
+	// Whatever, good for now
 	static const unsigned int sampler_count = 8;
 
-	// generate vertex/fragment shader code
+	// Generate vertex/fragment shader code
 	{
 	std::ostringstream vert_ss;
 
-	vert_ss << "void main(){";
-
+	vert_ss << "void main() {";
 	vert_ss << "gl_FrontColor = gl_Color;";
 	vert_ss << "gl_BackColor = gl_Color;";
 
@@ -475,7 +476,6 @@ void CompiledTevStages::Compile(const TevStages& stages)
 		vert_ss << "gl_TexCoord[" << i << "] = gl_TextureMatrix[" << i << "] * gl_MultiTexCoord" << i << ";";
 
 	vert_ss << "gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;";
-
 	vert_ss << '}';
 
 	// create/compile vertex shader
@@ -491,18 +491,18 @@ void CompiledTevStages::Compile(const TevStages& stages)
 
 	glCompileShader(vertex_shader);
 
-	// generate fragment shader code
+	// Generate fragment shader code
 	{
 	std::ostringstream frag_ss;
 
-	// uniforms
+	// Uniforms
 	for (unsigned int i = 0; i != sampler_count; ++i)
 		frag_ss << "uniform sampler2D textures" << i << ';';
 	frag_ss << "uniform vec4 registers[3]" ";";
 	//frag_ss << "uniform vec4 color_constant" ";";
 	frag_ss << "vec4 color_constant" ";";
 
-	frag_ss << "void main(){";
+	frag_ss << "void main() {";
 
 	frag_ss << "vec4 color_previous" ";";
 	frag_ss << "vec4 color_texture" ";";
@@ -553,30 +553,32 @@ void CompiledTevStages::Compile(const TevStages& stages)
 
 	for (auto& stage : stages)
 	{
-		// current texture color
+		// Current texture color
 		// 0xff is a common value for a disabled texture
 		if (stage.texmap < sampler_count)
+		{
 			frag_ss << "color_texture = texture2D(textures" << (int)stage.texmap
-				<< ", gl_TexCoord[" << (int)stage.texcoord << "].xy);";
+			        << ", gl_TexCoord[" << (int)stage.texcoord << "].xy);";
+		}
 
 		frag_ss << '{';
 
-		// all 4 inputs
+		// All 4 inputs
 		frag_ss << "vec4 a = vec4("
-			<< color_inputs[stage.color_a] << ','
-			<< alpha_inputs[stage.alpha_a] << ");";
+		        << color_inputs[stage.color_a] << ','
+		        << alpha_inputs[stage.alpha_a] << ");";
 
 		frag_ss << "vec4 b = vec4("
-			<< color_inputs[stage.color_b] << ','
-			<< alpha_inputs[stage.alpha_b] << ");";
+		        << color_inputs[stage.color_b] << ','
+		        << alpha_inputs[stage.alpha_b] << ");";
 
 		frag_ss << "vec4 c = vec4("
-			<< color_inputs[stage.color_c] << ','
-			<< alpha_inputs[stage.alpha_c] << ");";
+		        << color_inputs[stage.color_c] << ','
+		        << alpha_inputs[stage.alpha_c] << ");";
 
 		frag_ss << "vec4 d = vec4("
-			<< color_inputs[stage.color_d] << ','
-			<< alpha_inputs[stage.alpha_d] << ");";
+		        << color_inputs[stage.color_d] << ','
+		        << alpha_inputs[stage.alpha_d] << ");";
 
 		auto const write_tevop = [&](u8 tevop, const char swiz[])
 		{
@@ -633,22 +635,22 @@ void CompiledTevStages::Compile(const TevStages& stages)
 			write_tevop(stage.alpha_op, ".a");
 		}
 		else
+		{
 			write_tevop(stage.color_op, "");
+		}
 
-		// output register
+		// Output register
 		frag_ss << output_registers[stage.color_regid] << ".rgb = result" ".rgb;";
 		frag_ss << output_registers[stage.alpha_regid] << ".a = result" ".a;";
-
 		frag_ss << '}';
 	}
 
 	frag_ss << "gl_FragColor = color_previous;";
-
 	frag_ss << '}';
 
 	//std::cout << frag_ss.str() << '\n';
 
-	// create/compile fragment shader
+	// Create/compile fragment shader
 	fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
 	{
@@ -657,11 +659,11 @@ void CompiledTevStages::Compile(const TevStages& stages)
 	glShaderSource(fragment_shader, 1, &frag_src, nullptr);
 	}
 
-	}	// done generating fragment shader
+	} // Done generating fragment shader
 
 	glCompileShader(fragment_shader);
 
-	// check compile status of both shaders
+	// Check compile status of both shaders
 	{
 	GLint
 		vert_compiled = false,
@@ -682,7 +684,7 @@ void CompiledTevStages::Compile(const TevStages& stages)
 	glAttachShader(program, vertex_shader);
 	glAttachShader(program, fragment_shader);
 
-	// link program, check link status
+	// Link program, check link status
 	glLinkProgram(program);
 	GLint link_status;
 	glGetProgramiv(program, GL_LINK_STATUS, &link_status);
@@ -692,7 +694,7 @@ void CompiledTevStages::Compile(const TevStages& stages)
 
 	glUseProgram(program);
 
-	// set uniforms
+	// Set uniforms
 	for (unsigned int i = 0; i != sampler_count; ++i)
 	{
 		std::ostringstream ss;
@@ -700,14 +702,14 @@ void CompiledTevStages::Compile(const TevStages& stages)
 		glUniform1i(glGetUniformLocation(program, ss.str().c_str()), g_texmap_start_index + i);
 	}
 
-	// print log
+	// Print log
 	{
 	GLchar infolog[10240] = {};
 	glGetProgramInfoLog(program, 10240, nullptr, infolog);
 	std::cout << infolog;
 	}
 
-	// pause
+	// Pause
 	//std::cin.get();
 }
 
@@ -728,7 +730,7 @@ void GX_LoadTexObj(GXTexObj* obj, u8 mapid)
 
 	entry->Bind();
 
-	// texture wrap
+	// Texture wrap
 	static const GLenum wraps[] =
 	{
 		GL_CLAMP_TO_EDGE,
@@ -740,7 +742,7 @@ void GX_LoadTexObj(GXTexObj* obj, u8 mapid)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wraps[txobj.wrap_s & 0x3]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wraps[txobj.wrap_t & 0x3]);
 
-	// texture filter
+	// Texture filter
 	static const GLint filters[] =
 	{
 		GL_NEAREST,
@@ -851,10 +853,10 @@ void GX_SetNumTevStages(u8 num)
 	g_active_stages.resize(num);
 	CompiledTevStages& comptevs = g_compiled_tev_stages[g_active_stages];
 
-	// compile program if needed
+	// Compile program if needed
 	if (!comptevs.program)
 		comptevs.Compile(g_active_stages);
 
-	// enable the program
+	// Enable the program
 	comptevs.Enable();
 }

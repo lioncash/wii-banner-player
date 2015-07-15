@@ -40,18 +40,19 @@ void Pane::Load(std::istream& file)
 
 	SetName(ReadFixedLengthString<NAME_LENGTH>(file));
 
-	ReadFixedLengthString<USER_DATA_LENGTH>(file);	// user data
+	// User data
+	ReadFixedLengthString<USER_DATA_LENGTH>(file);
 
 	file >> BE
-		>> translate.x >> translate.y >> translate.z
-		>> rotate.x >> rotate.y >> rotate.z
-		>> scale.x >> scale.y
-		>> width >> height;
+	     >> translate.x >> translate.y >> translate.z
+	     >> rotate.x >> rotate.y >> rotate.z
+	     >> scale.x >> scale.y
+	     >> width >> height;
 }
 
 Pane::~Pane()
 {
-	// delete children
+	// Delete children
 	for (Pane* pane : panes)
 		delete pane;
 }
@@ -76,7 +77,7 @@ void Pane::Render(const Resources& resources, u8 parent_alpha, Vec2f adjust) con
 
 	glPushMatrix();
 
-	// position
+	// Position
 	glTranslatef(GetTranslate().x * adjust.x, GetTranslate().y * adjust.y, GetTranslate().z);
 
 	if (!GetPositionAdjust())
@@ -85,15 +86,15 @@ void Pane::Render(const Resources& resources, u8 parent_alpha, Vec2f adjust) con
 		adjust.y = 1.f;
 	}
 
-	// rotate
+	// Rotate
 	glRotatef(GetRotate().x, 1.f, 0.f, 0.f);
 	glRotatef(GetRotate().y, 0.f, 1.f, 0.f);
 	glRotatef(GetRotate().z, 0.f, 0.f, 1.f);
 
-	// scale
+	// Scale
 	glScalef(GetScale().x, GetScale().y, 1.f);
 
-	// render self
+	// Render self
 	Draw(resources, render_alpha, adjust);
 
 	// render children
@@ -122,16 +123,16 @@ Pane* Pane::FindPane(const std::string& find_name)
 
 void Pane::ProcessHermiteKey(const KeyType& type, float value)
 {
-	if (type.type == ANIMATION_TYPE_VERTEX_COLOR)	// vertex color
+	if (type.type == ANIMATION_TYPE_VERTEX_COLOR)
 	{
-		// only alpha is supported for Panes afaict
+		// Only alpha is supported for Panes afaict
 		if (0x10 == type.target)
 		{
 			alpha = (u8)value;
 			return;
 		}
 	}
-	else if (type.type == ANIMATION_TYPE_PANE)	// pane animation
+	else if (type.type == ANIMATION_TYPE_PANE)
 	{
 		if (type.target < 10)
 		{
@@ -162,7 +163,7 @@ void Pane::ProcessHermiteKey(const KeyType& type, float value)
 
 void Pane::ProcessStepKey(const KeyType& type, StepKeyHandler::KeyData data)
 {
-	if (type.type == ANIMATION_TYPE_VISIBILITY)	// visibility
+	if (type.type == ANIMATION_TYPE_VISIBILITY)
 	{
 		SetVisible(!!data.data2);
 		return;
@@ -190,15 +191,16 @@ void Quad::Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const
 	if (material_index < resources.materials.size())
 		resources.materials[material_index]->Apply(resources.textures);
 
-	// go lambda
+	// Go lambda
 	auto const quad_vertex = [=](unsigned int v, float x, float y)
 	{
-		// color
+		// Color
+		// Apply alpha
 		glColor4ub(vertex_colors[v].r, vertex_colors[v].g, vertex_colors[v].b,
-			MultiplyColors(vertex_colors[v].a, render_alpha));	// apply alpha
+			MultiplyColors(vertex_colors[v].a, render_alpha));
 
-		// tex coords
-		if (1 == tex_coords.size())
+		// Texture coords
+		if (tex_coords.size() == 1)
 		{
 			auto* const fv = &tex_coords.front().coords[v].s;
 			for (GLenum t = GL_TEXTURE0; t != GL_TEXTURE8; ++t)
@@ -211,16 +213,16 @@ void Quad::Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const
 				glMultiTexCoord2fv(target++, &tc.coords[v].s);
 		}
 
-		// position
+		// Position
 		glVertex2f(x, y);
 	};
 
 	glPushMatrix();
 
-	// size
+	// Size
 	glScalef(GetWidth() * adjust.x, GetHeight() * adjust.y, 1.f);
 
-	// origin
+	// Origin
 	glTranslatef(-0.5f * GetOriginX(), -0.5f * GetOriginY(), 0.f);
 
 	glBegin(GL_QUADS);
@@ -235,11 +237,11 @@ void Quad::Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const
 
 void Quad::ProcessHermiteKey(const KeyType& type, float value)
 {
-	if (type.type == ANIMATION_TYPE_VERTEX_COLOR)	// vertex color
+	if (type.type == ANIMATION_TYPE_VERTEX_COLOR)
 	{
 		if (type.target < 0x10)
 		{
-			// vertex colors
+			// Vertex colors
 			(&vertex_colors->r)[type.target] = (u8)value;
 			return;
 		}

@@ -58,20 +58,21 @@ void Texture::Load(std::istream& file)
 {
 	const std::streamoff file_start = file.tellg();
 
-	// read file header
+	// Read file header
 	FourCC magic;
 	u32 texture_count;
-	u32 header_size; // always 0xC
+	u32 header_size; // Always 0xC
 
 	file >> magic >> BE >> texture_count >> header_size;
 
+	// Bad header
 	if (magic != BINARY_MAGIC_TEXTURE)
-		return;	// bad header
+		return;
 
-	// seek to end of header
+	// Seek to end of header
 	file.seekg(header_size - 0xC, std::ios::cur);
 
-	// only support a single texture
+	// Only support a single texture
 	if (texture_count > 1)
 	{
 		texture_count = 1;
@@ -80,13 +81,13 @@ void Texture::Load(std::istream& file)
 		std::cin.get();
 	}
 
-	// read texture offsets
+	// Read texture offsets
 	std::streamoff next_offset = file.tellg();
 	while (texture_count--)
 	{
 		file.seekg(next_offset, std::ios::beg);
 
-		// header offsets
+		// Header offsets
 		u32 texture_offset;
 		u32 palette_offset; // 0 if no palette
 
@@ -94,7 +95,7 @@ void Texture::Load(std::istream& file)
 
 		next_offset = file.tellg();
 
-		// seek to/read palette header
+		// Seek to/read palette header
 		if (palette_offset)
 		{
 			file.seekg(file_start + palette_offset, std::ios::beg);
@@ -114,7 +115,7 @@ void Texture::Load(std::istream& file)
 			tlut_ptr = new char[palette_count * 2];
 			file.read(tlut_ptr, palette_count * 2);
 
-			// load tlut
+			// Load TLUT
 			GXTlutObj tlutobj;
 			GX_InitTlutObj(&tlutobj, tlut_ptr, palette_format, palette_count);
 
@@ -124,10 +125,10 @@ void Texture::Load(std::istream& file)
 			GX_InitTexObjTlut(&texobj, tlut_name);
 		}
 
-		// seek to texture header
+		// Seek to texture header
 		file.seekg(file_start + texture_offset, std::ios::beg);
 
-		// read texture header
+		// Read texture header
 		u32 format;
 		u32 texture_data_offset;
 
@@ -144,7 +145,7 @@ void Texture::Load(std::istream& file)
 			>> wrap_s >> wrap_t >> min_filter >> mag_filter
 			>> lod_bias >> edge_lod >> min_lod >> max_lod >> unpacked;
 
-		// seek to texture data
+		// Seek to texture data
 		file.seekg(file_start + texture_data_offset, std::ios::beg);
 
 		const u32 tex_size = GX_GetTexBufferSize(width, height, format, true, max_lod);
@@ -157,10 +158,10 @@ void Texture::Load(std::istream& file)
 
 			file.read(img_ptr, tex_size);
 
-			// load the texture
+			// Load the texture
 			GX_InitTexObj(&texobj, img_ptr,	width, height, format, wrap_s, wrap_t, true);
 
-			// filter mode
+			// Filter mode
 			GX_InitTexObjFilterMode(&texobj, min_filter, mag_filter);
 		}
 	}

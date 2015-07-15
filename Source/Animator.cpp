@@ -38,7 +38,7 @@ void Animator::LoadKeyFrames(std::istream& file, u8 tag_count, std::streamoff or
 		u8 entry_count;
 
 		file >> BE >> animation_type >> entry_count;
-		file.seekg(3, std::ios::cur);	// some padding
+		file.seekg(3, std::ios::cur); // some padding
 
 		ReadOffsetList<u32>(file, entry_count, frame_origin, [&]
 		{
@@ -48,7 +48,7 @@ void Animator::LoadKeyFrames(std::istream& file, u8 tag_count, std::streamoff or
 			u8 pad;
 			u16 key_count;
 			u16 pad1;
-			u32 offset;	// TODO: handle this
+			u32 offset; // TODO: handle this
 
 			file >> BE >> index >> target >> data_type >> pad
 				>> key_count >> pad1 >> offset;

@@ -60,24 +60,22 @@ void Layout::Load(std::istream& file)
 	width = height = 0.f;
 	centered = 0;
 
-	// read header
+	// Read header
 	FourCC header_magic;
 	u16 endian;
 	u16 version;
 	u32 filesize;
-	u16 first_section_offset; // offset to first section
+	u16 first_section_offset; // Offset to first section
 	u16 section_count;
 
 	file >> header_magic >> BE >> endian >> version
-		>> filesize >> first_section_offset >> section_count;
+	     >> filesize >> first_section_offset >> section_count;
 
-	if (header_magic != BINARY_MAGIC_LAYOUT
-		|| endian != 0xFEFF
-		|| version != 0x0008
-		)
-		return;	// bad header
+	// Bad header
+	if (header_magic != BINARY_MAGIC_LAYOUT || endian != 0xFEFF || version != 0x0008)
+		return;
 
-	// temporary stacks
+	// Temporary stacks
 	Group* last_group = nullptr;
 	std::stack<std::map<std::string, Group>*> group_stack;
 	group_stack.push(&groups);
@@ -91,21 +89,21 @@ void Layout::Load(std::istream& file)
 		pane_stack.top()->push_back(last_pane = pane);
 	};
 
-	// seek to the first section
+	// Seek to the first section
 	file.seekg(file_start + first_section_offset, std::ios::beg);
 
 	ReadSections(file, section_count, [&](FourCC magic, std::streamoff section_start)
 	{
 		if (magic == Layout::BINARY_MAGIC)
 		{
-			// read layout
+			// Read layout
 			file >> BE >> centered;
 			file.seekg(3, std::ios::cur);
 			file >> BE >> width >> height;
 		}
 		else if (magic == TextureList::BINARY_MAGIC)
 		{
-			// load texture list
+			// Load texture list
 			u16 texture_count;
 			u16 offset;
 
@@ -124,7 +122,7 @@ void Layout::Load(std::istream& file)
 		}
 		else if (magic == FontList::BINARY_MAGIC)
 		{
-			// load font list
+			// Load font list
 			u16 font_count;
 			u16 offset;
 
@@ -143,7 +141,7 @@ void Layout::Load(std::istream& file)
 		}
 		else if (magic == MaterialList::BINARY_MAGIC)
 		{
-			// load materials
+			// Load materials
 			u16 material_count;
 			u16 offset;
 
@@ -279,7 +277,7 @@ void Layout::AdvanceFrame()
 {
 	++frame_current;
 
-	// should i just use == ?
+	// Should i just use == ?
 	if (frame_current >= frame_loop_end)
 		frame_current = frame_loop_start;
 
@@ -288,12 +286,12 @@ void Layout::AdvanceFrame()
 
 void Layout::SetLanguage(const std::string& language)
 {
-	// TODO: i'd like an empty language to unhide everything, maybe
+	// TODO: I'd like an empty language to unhide everything, maybe
 
 	// hide panes of non-matching languages
 	for (auto& group : groups["RootGroup"].groups)
 	{
-		// some hax, there are some odd "Rso0" "Rso1" groups that shouldn't be hidden
+		// Some hax, there are some odd "Rso0" "Rso1" groups that shouldn't be hidden
 		// only the 3 character language groups should be
 		if (group.first != language && group.first.length() == 3)
 		{
@@ -306,7 +304,7 @@ void Layout::SetLanguage(const std::string& language)
 		}
 	}
 
-	// unhide panes of matching language, some banners list language specific panes in multiple language groups
+	// Unhide panes of matching language, some banners list language specific panes in multiple language groups
 	for (auto& pane : groups["RootGroup"].groups[language].panes)
 	{
 		Pane* const found = FindPane(pane);

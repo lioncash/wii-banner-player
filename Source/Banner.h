@@ -43,7 +43,7 @@ public:
 
 	void LoadBanner();
 	
-	// definition here because <Windows.h> is declaring a macro "LoadIcon" and messing with crap :/
+	// Definition here because <Windows.h> is declaring a macro "LoadIcon" and messing with crap :/
 	void LoadIcon()
 	{
 		if (offset_icon && !layout_icon)

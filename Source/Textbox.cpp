@@ -38,7 +38,7 @@ void Textbox::Load(std::istream& file)
 	u16 text_buf_bytes, text_str_bytes;
 
 	file >> BE >> text_buf_bytes >> text_str_bytes
-		>> material_index >> font_index >> text_position >> text_alignment;
+	     >> material_index >> font_index >> text_position >> text_alignment;
 
 	file.seekg(2, std::ios::cur);
 
@@ -50,7 +50,7 @@ void Textbox::Load(std::istream& file)
 
 	file >> BE >> width >> height >> space_char >> space_line;
 
-	// read utf-16 string
+	// Read UTF-16 string
 	while (true)
 	{
 		wchar_t c = 0;

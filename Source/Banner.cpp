@@ -49,7 +49,7 @@ enum BinaryMagic : u32
 	BINARY_MAGIC_PANE_ANIMATION_INFO = MAKE_FOURCC('p', 'a', 'i', '1')
 };
 
-// load keyframes from a brlan file
+// Load keyframes from a brlan file
 // TODO: can put this function somewhere better :p
 FrameNumber LoadAnimators(std::istream& file, Layout& layout, u8 key_set)
 {
@@ -57,19 +57,16 @@ FrameNumber LoadAnimators(std::istream& file, Layout& layout, u8 key_set)
 
 	u16 frame_count;
 
-	// read header
+	// Read header
 	FourCC header_magic;
 	u16 endian; // always 0xFEFF
 	u16 version; // always 0x0008
 
 	file >> header_magic >> BE >> endian >> version;
 
-	if (header_magic != BINARY_MAGIC_ANIMATION
-		|| endian != 0xFEFF
-		|| version != 0x008
-		)
-		return 0;	// bad header
-
+	// Bad header
+	if (header_magic != BINARY_MAGIC_ANIMATION || endian != 0xFEFF || version != 0x008)
+		return 0;
 
 	u32 file_size;
 	u16 offset; // offset to the first section
@@ -77,11 +74,11 @@ FrameNumber LoadAnimators(std::istream& file, Layout& layout, u8 key_set)
 
 	file >> BE >> file_size >> offset >> section_count;
 
-	// only a single pa*1 section is currently supported
+	// Only a single pa*1 section is currently supported
 	//if (section_count > 1)
 	//	section_count = 1;
 
-	// seek to header of first section
+	// Seek to header of first section
 	file.seekg(file_start + offset, std::ios::beg);
 
 	ReadSections(file, section_count, [&](FourCC magic, std::streamoff section_start)
@@ -95,12 +92,12 @@ FrameNumber LoadAnimators(std::istream& file, Layout& layout, u8 key_set)
 			u32 entry_offset;
 
 			file >> BE >> frame_count >> loop
-				>> pad >> file_count >> animator_count;
+			     >> pad >> file_count >> animator_count;
 
 			file >> BE >> entry_offset;
 			file.seekg(section_start + entry_offset);
 
-			// read each animator
+			// Read each animator
 			ReadOffsetList<u32>(file, animator_count, section_start, [&]
 			{
 				const std::streamoff origin = file.tellg();
@@ -145,22 +142,24 @@ Banner::Banner(const std::string& _filename)
 
 	bnr_file.seekg(header_bytes, std::ios::cur);
 
-	// lets see if this is an opening.bnr
+	// Let's see if this is an opening.bnr
 	FourCC magic;
 	bnr_file >> magic;
 	if (magic != BINARY_MAGIC_U8_ARCHIVE)
 	{
-		// lets see if it's a 00000000.app
+		// Let's see if it's a 00000000.app
 		bnr_file.seekg(60, std::ios::cur);
 		bnr_file >> magic;
 
+		// Not a 00000000.app either
 		if (magic != BINARY_MAGIC_U8_ARCHIVE)
-			return;	// not a 00000000.app either
+			return;
 
 		header_bytes = 0x640;
 	}
 
-	header_bytes += 32;	// the inner-files have bigger headers
+	// The inner-files have bigger headers
+	header_bytes += 32;
 
 	bnr_file.seekg(-4, std::ios::cur);
 	DiscIO::CARCFile opening_arc(bnr_file);
@@ -212,18 +211,18 @@ Layout* Banner::LoadLayout(const std::string& lyt_name, std::streamoff offset, V
 	DiscIO::CARCFile bin_arc(file);
 	const auto brlyt_offset = bin_arc.GetFileOffset("arc/blyt/" + lyt_name + ".brlyt");
 
-	if (0 == brlyt_offset)
+	if (brlyt_offset == 0)
 		return nullptr;
 
 	file.seekg(brlyt_offset, std::ios::beg);
 	auto* const layout = new Layout;
 	layout->Load(file);
 
-	// override size
+	// Override size
 	layout->SetWidth(size.x);
 	layout->SetHeight(size.y);
 
-	// load textures
+	// Load textures
 	for (Texture* texture : layout->resources.textures)
 	{
 		auto const texture_offset = bin_arc.GetFileOffset("arc/timg/" + texture->GetName());
@@ -234,9 +233,9 @@ Layout* Banner::LoadLayout(const std::string& lyt_name, std::streamoff offset, V
 		}
 	}
 
-	// load fonts
+	// Load fonts
 	{
-	// this guy is in "User/Wii/shared1"
+	// This guy is in "User/Wii/shared1"
 	std::ifstream font_file("00000003.app", std::ios::binary | std::ios::in);
 	DiscIO::CARCFile font_arc(font_file);
 
@@ -254,7 +253,7 @@ Layout* Banner::LoadLayout(const std::string& lyt_name, std::streamoff offset, V
 	}
 	}
 
-	// load animations
+	// Load animations
 	FrameNumber length_start = 0, length_loop = 0;
 
 	auto const brlan_start_offset = bin_arc.GetFileOffset("arc/anim/" + lyt_name + "_Start.brlan");
@@ -266,12 +265,12 @@ Layout* Banner::LoadLayout(const std::string& lyt_name, std::streamoff offset, V
 		file.seekg(brlan_start_offset, std::ios::beg);
 		length_start = LoadAnimators(file, *layout, 0);
 
-		// banner uses 2 brlan files, a starting one and a looping one
+		// Banner uses 2 brlan files, a starting one and a looping one
 		brlan_loop_offset = bin_arc.GetFileOffset("arc/anim/" + lyt_name + "_Loop.brlan");
 	}
 	else
 	{
-		// banner uses a single repeating brlan
+		// Banner uses a single repeating brlan
 		brlan_loop_offset = bin_arc.GetFileOffset("arc/anim/" + lyt_name + ".brlan");
 	}
 
@@ -284,7 +283,8 @@ Layout* Banner::LoadLayout(const std::string& lyt_name, std::streamoff offset, V
 
 	layout->SetLoopStart(length_start);
 	layout->SetLoopEnd(length_start + length_loop);
-	// update everything for frame 0
+
+	// Update everything for frame 0
 	layout->SetFrame(0);
 
 	return layout;

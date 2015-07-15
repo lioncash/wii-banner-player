@@ -38,7 +38,7 @@ void Material::Load(std::istream& file)
 {
 	SetName(ReadFixedLengthString<NAME_LENGTH>(file));
 
-	// read colors
+	// Read colors
 	ReadBEArray(file, &color_regs->r, sizeof(color_regs) / sizeof(s16));
 	ReadBEArray(file, &color_constants->r, sizeof(color_constants));
 
@@ -69,7 +69,7 @@ void Material::Load(std::istream& file)
 
 	//std::cout << "flags: " << flags.value << '\n';
 
-	// texture map
+	// Texture map
 	for (u32 i = 0; i != flags.texture_map; ++i)
 	{
 		TextureMap map;
@@ -78,7 +78,7 @@ void Material::Load(std::istream& file)
 		texture_maps.push_back(std::move(map));
 	}
 
-	// texture srt
+	// Texture srt
 	for (u32 i = 0; i != flags.texture_srt; ++i)
 	{
 		TextureSrt srt;
@@ -98,7 +98,7 @@ void Material::Load(std::istream& file)
 	//	texture_srts.push_back(std::move(srt));
 	//}
 
-	// texture coord gen
+	// Texture coord gen
 	for (u32 i = 0; i != flags.texture_coord_gen; ++i)
 	{
 		TextureCoordGen coord;
@@ -118,7 +118,7 @@ void Material::Load(std::istream& file)
 	//	texture_coord_gens.push_back(std::move(coord));
 	//}
 
-	// channel control
+	// Channel control
 	if (flags.channel_control)
 	{
 		u8 color_matsrc, alpha_matsrc;
@@ -137,7 +137,7 @@ void Material::Load(std::istream& file)
 		//std::cout << "color_matsrc: " << (int)color_matsrc << " alpha_matsrc: " << (int)alpha_matsrc << '\n';
 	}
 
-	// material color
+	// Material color
 	if (flags.material_color)
 	{
 		ReadBEArray(file, &color.r, sizeof(color));
@@ -147,7 +147,7 @@ void Material::Load(std::istream& file)
 		memset(&color.r, 0xff, 4);
 	}
 
-	// tev swap table
+	// TEV swap table
 	if (flags.tev_swap_table)
 	{
 		ReadBEArray(file, &tev_swap_table->value, sizeof(tev_swap_table));
@@ -192,7 +192,7 @@ void Material::Load(std::istream& file)
 		std::cout << "Ind Stages not yet supported !!\n";
 	}
 
-	// tev stage
+	// TEV stage
 	for (u32 i = 0; i != flags.tev_stage; ++i)
 	{
 		TevStage ts;
@@ -203,7 +203,7 @@ void Material::Load(std::istream& file)
 	}
 	if (!flags.tev_stage)
 	{
-		// set up defaults, this seems dumb/wrong
+		// Set up defaults, this seems dumb/wrong
 
 		TevStage tev;
 		memset(tev.data, 0, sizeof(tev.data));
@@ -239,7 +239,7 @@ void Material::Load(std::istream& file)
 		tev_stages.push_back(tev);
 	}
 
-	// alpha compare
+	// Alpha compare
 	if (flags.alpha_compare)
 	{
 		file >> BE >> alpha_compare.function >> alpha_compare.op
@@ -259,7 +259,7 @@ void Material::Load(std::istream& file)
 		//alpha_compare.op = ;
 	}
 
-	// blend mode
+	// Blend mode
 	if (flags.blend_mode)
 	{
 		file >> BE >> blend_mode.type >> blend_mode.src_factor >> blend_mode.dst_factor >> blend_mode.logical_op;
@@ -281,18 +281,18 @@ void Material::Load(std::istream& file)
 
 void Material::Apply(const TextureList& textures) const
 {
-	// alpha compare
+	// Alpha compare
 	GX_SetAlphaCompare(alpha_compare.function & 0xf, alpha_compare.ref0,
 		alpha_compare.op, alpha_compare.function >> 4, alpha_compare.ref1);
 
-	// blend mode
+	// Blend mode
 	GX_SetBlendMode(blend_mode.type, blend_mode.src_factor, blend_mode.dst_factor, blend_mode.logical_op);
 
-	// tev reg colors
+	// TEV reg colors
 	for (unsigned int i = 0; i != 3; ++i)
 		GX_SetTevColorS10(GX_TEVREG0 + i, color_regs[i]);
 
-	// bind textures
+	// Bind textures
 	{
 	unsigned int i = 0;
 	for (auto& tr : texture_maps)
@@ -309,7 +309,7 @@ void Material::Apply(const TextureList& textures) const
 	}
 	}
 
-	// texture coord gen
+	// Texture coord gen
 	glMatrixMode(GL_TEXTURE);
 	{
 	unsigned int i = 0;
@@ -345,7 +345,7 @@ void Material::Apply(const TextureList& textures) const
 	}
 	glMatrixMode(GL_MODELVIEW);
 
-	// tev stages
+	// TEV stages
 	{
 	int i = 0;
 	for (auto& ts : tev_stages)
@@ -367,11 +367,11 @@ void Material::Apply(const TextureList& textures) const
 		++i;
 	}
 
-	// enable correct number of tev stages
+	// Enable correct number of TEV stages
 	GX_SetNumTevStages(i);
 	}
 
-	// currently this will do nothing because of vertex_colors
+	// Currently this will do nothing because of vertex_colors
 	glColor4ubv(&color.r);
 }
 
@@ -398,14 +398,21 @@ void Material::ProcessHermiteKey(const KeyType& type, float value)
 
 			return;
 		}
-		return;	// TODO: remove this return
+
+		// TODO: remove this return
+		return;
 	}
-	else if (type.type == ANIMATION_TYPE_IND_MATERIAL)	// ind texture crap
+	else if (type.type == ANIMATION_TYPE_IND_MATERIAL)
 	{
-		return;	// TODO: remove this return
+		// ind texture crap
+
+		// TODO: remove this return
+		return;
 	}
-	else if (type.type == ANIMATION_TYPE_MATERIAL_COLOR)	// material color
+	else if (type.type == ANIMATION_TYPE_MATERIAL_COLOR)
 	{
+		// Material color
+
 		if (type.target < 4)
 		{
 			// color
@@ -414,13 +421,13 @@ void Material::ProcessHermiteKey(const KeyType& type, float value)
 		}
 		else if (type.target < 0x10)
 		{
-			// initial color of tev color/output registers, often used for foreground/background
+			// Initial color of TEV color/output registers, often used for foreground/background
 			(&color_regs->r)[type.target - 4] = (u16)value;
 			return;
 		}
 		else if (type.target < 0x20)
 		{
-			// tev color constants
+			// TEV color constants
 			(&color_constants->r)[type.target - 0x10] = (u8)value;
 			return;
 		}
@@ -431,7 +438,8 @@ void Material::ProcessHermiteKey(const KeyType& type, float value)
 
 void Material::ProcessStepKey(const KeyType& type, StepKeyHandler::KeyData data)
 {
-	if (type.type == ANIMATION_TYPE_TEXTURE_PALETTE)	// tpl palette
+	// TPL palette
+	if (type.type == ANIMATION_TYPE_TEXTURE_PALETTE)
 	{
 		// TODO: this aint no good
 

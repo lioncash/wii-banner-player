@@ -46,7 +46,7 @@ public:
 
 	~QueueThread()
 	{
-		// push an invalid job to tell the thread to die
+		// Push an invalid job to tell the thread to die
 		PushJob(std::numeric_limits<priority_type>::max(), job_type());
 
 		m_thread.join();
@@ -67,7 +67,7 @@ public:
 	template <typename F, typename A>
 	void Push(priority_type priority, F&& func, A&& arg)
 	{
-		// stupid msvc can't bind a lambda properly
+		// Stupid MSVC can't bind a lambda properly
 		std::function<void(A&&)> job(std::forward<F>(func));
 
 		PushJob(priority, std::bind<void>(std::move(job), std::forward<A>(arg)));
@@ -88,8 +88,9 @@ public:
 
 				lk.unlock();
 
+				// Done doing jobs, end thread
 				if (!func)
-					break;	// done doing jobs, end thread
+					break;
 
 				func();
 			}

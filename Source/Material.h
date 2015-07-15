@@ -158,7 +158,7 @@ private:
 	};
 	std::vector<TevStage> tev_stages;
 
-	GXColor color;	// TODO: where is "color" used?
+	GXColor color; // TODO: where is "color" used?
 
 	GXColorS10 color_regs[3];
 	GXColor color_constants[4];

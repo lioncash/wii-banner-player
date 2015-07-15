@@ -110,21 +110,21 @@ private:
 	u8 origin;
 	u8 flags;
 	u8 alpha;
-	bool hide;	// used by the groups
+	bool hide; // Used by the groups
 
 	Vec3f translate, rotate;
 	Vec2f scale;
 	float width, height;
 };
 
-// apparently Bounding is just a regular pane
+// Apparently Bounding is just a regular pane
 class Bounding : public Pane
 {
 public:
 	static const u32 BINARY_MAGIC = MAKE_FOURCC('b', 'n', 'd', '1');
 };
 
-// used by Picture and Window
+// Used by Picture and Window
 // TODO: put elsewhere I think
 class Quad : public Pane
 {

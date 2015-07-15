@@ -44,9 +44,9 @@ private:
 
 	u8 text_position, text_alignment;
 
-	GXColor colors[2];	// top and bottom apparently
+	GXColor colors[2]; // Top and bottom apparently
 
-	float width, height;	// character width and height ?
+	float width, height; // Character width and height ?
 	float space_char, space_line;
 
 	std::wstring text;

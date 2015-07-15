@@ -71,7 +71,7 @@ struct BNS
 		u8 unk;
 		u16 sample_rate;
 		u16 unk2;
-		u32 loop_start; // do we care?
+		u32 loop_start; // Do we care?
 		u32 sample_count;
 		// TODO SO MANY unknowns
 		u32 right_start;
@@ -109,12 +109,12 @@ struct BNS
 		start = in.tellg();
 
 		in >> hdr.magic >> BE >> hdr.endian >> hdr.size >> hdr.unk
-			>> hdr.info_off >> hdr.info_len >> hdr.data_off >> hdr.data_len;
+		   >> hdr.info_off >> hdr.info_len >> hdr.data_off >> hdr.data_len;
 
 		in.seekg(start + hdr.info_off, in.beg);
 		in >> info.magic >> BE >> info.size >> info.codec >> info.loop
-			>> info.channel_count >> info.unk >> info.sample_rate
-			>> info.unk2 >> info.loop_start >> info.sample_count;
+		   >> info.channel_count >> info.unk >> info.sample_rate
+		   >> info.unk2 >> info.loop_start >> info.sample_count;
 
 		in.seekg(6 * sizeof(u32), in.cur);
 
@@ -139,7 +139,7 @@ struct BNS
 
 		in.seekg(start + hdr.data_off, in.beg);
 		in >> data.magic >> BE >> data.size;
-		// chop off the magic + size words
+		// Chop off the magic + size words
 		hdr.data_len = data.size -= 8;
 		adpcm = new u8[data.size];
 		ReadBEArray(in, adpcm, data.size);
@@ -155,8 +155,7 @@ struct BNS
 	u32 GetSamplesCount()  { return info.sample_count * GetChannelsCount(); }
 	u16 GetSampleRate()    { return info.sample_rate; }
 
-	u32 DecodeChannelToPCM(s16 *pcm, u32 pcm_start_pos,
-		u32 adpcm_start_pos, u32 adpcm_end_pos)
+	u32 DecodeChannelToPCM(s16 *pcm, u32 pcm_start_pos, u32 adpcm_start_pos, u32 adpcm_end_pos)
 	{
 		u32 pcm_pos = pcm_start_pos;
 		u32 adpcm_pos = adpcm_start_pos;
@@ -177,25 +176,25 @@ struct BNS
 
 			for (int i = 0; i < 14; i++, adpcm_pos++)
 			{
-				// unpack a nybble
+				// Unpack a nybble
 				s16 nybble = (adpcm_pos & 1) ?
 					adpcm[adpcm_pos / 2] & 0xf : adpcm[adpcm_pos / 2] >> 4;
 
-				// sign extension
+				// Sign extension
 				if (nybble >= 8)
 					nybble -= 16;
 
-				// calc the sample
+				// Calculate the sample
 				int sample = (scale * nybble) +
 					((0x400 + coef1 * dsp_regs.yn1 + coef2 * dsp_regs.yn2) >> 11);
 
-				// clamp
+				// Clamp
 				if (sample > 0x7FFF)
 					sample = 0x7FFF;
 				else if (sample < -0x7FFF)
 					sample = -0x7FFF;
 
-				// history
+				// History
 				dsp_regs.yn2 = dsp_regs.yn1;
 				dsp_regs.yn1 = sample;
 
@@ -244,9 +243,10 @@ private:
 
 	std::vector<sf::Int16> samples;
 	std::size_t position;
-	std::size_t loop_position;	// -1 means don't loop
+	std::size_t loop_position; // -1 means don't loop
 
-	static const std::size_t buffer_size = 40000;	// size of audio chunks to stream
+	// Size of audio chunks to stream
+	static const std::size_t buffer_size = 40000;
 
 	enum SoundFormat
 	{
@@ -289,7 +289,9 @@ bool BannerStream::Load(std::istream& file)
 			loop_position = bns_file.info.loop_start * bns_file.info.channel_count;
 	}
 	else
+	{
 		return false;
+	}
 
 	bool ret = false;
 	sf::SoundBuffer SoundData;

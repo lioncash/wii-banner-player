@@ -49,29 +49,28 @@ void Font::Load(std::istream& file)
 {
 	const std::streamoff file_start = file.tellg();
 
-	// read header
+	// Read header
 	FourCC header_magic;
 	u16 endian;
 	u16 version;
 	u32 filesize;
-	u16 offset; // offset to first section
+	u16 offset; // Offset to first section
 	u16 section_count;
 
 	file >> header_magic >> BE >> endian >> version
-		>> filesize >> offset >> section_count;
+	     >> filesize >> offset >> section_count;
 
-	if (header_magic != BINARY_MAGIC_FONT
-		|| endian != 0xFEFF
-		|| version != 0x0104
-		)
-		return;	// bad header
+	// Bad header
+	if (header_magic != BINARY_MAGIC_FONT || endian != 0xFEFF || version != 0x0104)
+		return;
 
-	// seek to the first section
+	// Seek to the first section
 	file.seekg(file_start + offset, std::ios::beg);
 
 	ReadSections(file, section_count, [&](FourCC magic, std::streamoff section_start)
 	{
-		if (magic == BINARY_MAGIC_GLYPH_GROUP)	// glyph group
+		// Glyph group
+		if (magic == BINARY_MAGIC_GLYPH_GROUP)
 		{
 			u32 sheet_size;
 			u16 glyphs_per_sheet;
@@ -79,7 +78,7 @@ void Font::Load(std::istream& file)
 			u16 set_count, sheet_count, cwdh_count, cmap_count;
 
 			file >> BE >> sheet_size >> glyphs_per_sheet
-				>> set_count >> sheet_count >> cwdh_count >> cmap_count;
+			     >> set_count >> sheet_count >> cwdh_count >> cmap_count;
 
 			std::vector<std::string> sets;
 
@@ -103,7 +102,7 @@ void Font::Load(std::istream& file)
 			if (cmap_count)
 				ReadBEArray(file, &cmap_sizes[0], cmap_count);
 
-			// temporary
+			// Temporary
 			// TODO: read bunch of bitsets
 			file.seekg((sheet_count + cwdh_count + cmap_count) / 32, std::ios::cur);
 		}
@@ -118,12 +117,13 @@ void Font::Load(std::istream& file)
 			u8 height, width, ascent;
 
 			file >> BE >> font_type >> linefeed >> alter_char_index
-				>> default_width.left >> default_width.glyph_width >> default_width.char_width
-				>> encoding >> pGlyph >> pWidth >> pMap >> height >> width >> ascent;
+			     >> default_width.left >> default_width.glyph_width >> default_width.char_width
+			     >> encoding >> pGlyph >> pWidth >> pMap >> height >> width >> ascent;
 
 			//std::cout << "finf\n";
 		}
-		else if (magic == BINARY_MAGIC_TEXTURE_GLYPH)	// texture glyph
+		// Texture glyph
+		else if (magic == BINARY_MAGIC_TEXTURE_GLYPH)
 		{
 			u8 cell_width, cell_height;
 			s8 baseline_pos;
@@ -133,8 +133,8 @@ void Font::Load(std::istream& file)
 			u32 sheet_image;
 
 			file >> BE >> cell_width >> cell_height >> baseline_pos >> max_char_width
-				>> sheet_size >> sheet_count >> sheet_format >> sheet_row
-				>> sheet_row >> sheet_line >> sheet_width >> sheet_height;
+			     >> sheet_size >> sheet_count >> sheet_format >> sheet_row
+			     >> sheet_row >> sheet_line >> sheet_width >> sheet_height;
 
 			file >> LE >> sheet_image;
 
@@ -156,7 +156,8 @@ void Font::Load(std::istream& file)
 
 			GX_InitTexObj(&texobj, img_ptr, sheet_width, sheet_height, sheet_format & 0x7fff, 0, 0, 0);
 		}
-		else if (magic == BINARY_MAGIC_CHARACTER_CODE_MAP)	// char code map
+		// Char code map
+		else if (magic == BINARY_MAGIC_CHARACTER_CODE_MAP)
 		{
 			CodeMap cmap;
 			file >> BE >> cmap.ccode_begin >> cmap.ccode_end >> cmap.mapping_method;
@@ -165,7 +166,8 @@ void Font::Load(std::istream& file)
 
 			code_maps.push_back(std::move(cmap));
 		}
-		else if (magic == BINARY_MAGIC_CHARACTER_WIDTH)	// character width
+		// Character width
+		else if (magic == BINARY_MAGIC_CHARACTER_WIDTH)
 		{
 			u16 index_begin;
 			u16 index_end;
@@ -186,7 +188,8 @@ void Font::Apply() const
 {
 	// TODO:
 
-	GX_LoadTexObj(const_cast<GXTexObj*>(&texobj), 0); // ugly
+	// ugly
+	GX_LoadTexObj(const_cast<GXTexObj*>(&texobj), 0);
 }
 
 }
