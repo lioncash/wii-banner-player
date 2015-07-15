@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_PANE_H_
-#define WII_BNR_PANE_H_
+#pragma once
 
 #include <vector>
 
@@ -158,5 +157,3 @@ private:
 };
 
 }
-
-#endif

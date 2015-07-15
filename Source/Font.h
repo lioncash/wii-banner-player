@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_FONT_H_
-#define WII_BNR_FONT_H_
+#pragma once
 
 #include <list>
 #include <vector>
@@ -66,5 +65,3 @@ public:
 };
 
 }
-
-#endif

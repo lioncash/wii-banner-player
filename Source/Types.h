@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_TYPES_H_
-#define WII_BNR_TYPES_H_
+#pragma once
 
 #include <stdint.h>
 #include <string>
@@ -99,5 +98,3 @@ public:
 private:
 	std::string name;
 };
-
-#endif

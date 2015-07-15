@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_FUNCS_H_
-#define WII_BNR_FUNCS_H_
+#pragma once
 
 #include "Endian.h"
 
@@ -139,5 +138,3 @@ inline u8 MultiplyColors(C1 c1, C2 c2)
 {
 	return (u16)c1 * c2 / 0xff;
 }
-
-#endif

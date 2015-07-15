@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_PICTURE_H_
-#define WII_BNR_PICTURE_H_
+#pragma once
 
 #include "Pane.h"
 
@@ -40,5 +39,3 @@ public:
 };
 
 }
-
-#endif

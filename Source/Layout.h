@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_LAYOUT_H_
-#define WII_BNR_LAYOUT_H_
+#pragma once
 
 #include <map>
 #include <list>
@@ -103,5 +102,3 @@ private:
 };
 
 }
-
-#endif

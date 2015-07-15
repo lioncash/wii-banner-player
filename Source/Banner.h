@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_BANNER_H_
-#define WII_BNR_BANNER_H_
+#pragma once
 
 #include "Layout.h"
 #include "Sound.h"
@@ -68,4 +67,3 @@ private:
 
 }
 
-#endif

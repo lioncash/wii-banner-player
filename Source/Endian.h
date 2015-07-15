@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_ENDIAN_H_
-#define WII_BNR_ENDIAN_H_
+#pragma once
 
 #include <iostream>
 
@@ -124,5 +123,3 @@ inline std::istream& operator>>(std::istream& lhs, FourCC& rhs)
 }
 
 std::ostream& operator<<(std::ostream& lhs, const FourCC& rhs);
-
-#endif

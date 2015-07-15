@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_QUEUE_THREAD_H_
-#define WII_BNR_QUEUE_THREAD_H_
+#pragma once
 
 #include <map>
 #include <functional>
@@ -190,5 +189,3 @@ private:
 //
 //	std::map<JobId, JobQueue> job_queues;
 //};
-
-#endif

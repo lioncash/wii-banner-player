@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_SOUND_H_
-#define WII_BNR_SOUND_H_
+#pragma once
 
 namespace WiiBanner
 {
@@ -47,5 +46,3 @@ private:
 };
 
 }
-
-#endif

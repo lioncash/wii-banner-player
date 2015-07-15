@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_WRAP_GX_
-#define WII_BNR_WRAP_GX_
+#pragma once
 
 #include <cstring>
 
@@ -106,5 +105,3 @@ void 	GX_SetTevColorOp (u8 tevstage, u8 tevop, u8 tevbias, u8 tevscale, u8 clamp
 void 	GX_SetTevColorS10 (u8 tev_regid, GXColorS10 color);
 
 void 	GX_SetNumTevStages (u8 num);
-
-#endif

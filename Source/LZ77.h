@@ -21,8 +21,7 @@ misrepresented as being the original software.
 distribution.
 */
 
-#ifndef WII_BNR_LZ77_H_
-#define WII_BNR_LZ77_H_
+#pragma once
 
 #include <sstream>
 
@@ -117,5 +116,3 @@ private:
 	std::stringstream data;
 	std::istream* ret_stream;
 };
-
-#endif
