@@ -25,8 +25,8 @@ distribution.
 
 #include <vector>
 
-#include "WrapGx.h"
 #include "Types.h"
+#include "WrapGx.h"
 
 namespace WiiBanner
 {

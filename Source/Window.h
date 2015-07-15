@@ -23,6 +23,8 @@ distribution.
 
 #pragma once
 
+#include <istream>
+#include <vector>
 #include "Pane.h"
 
 namespace WiiBanner

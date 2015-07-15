@@ -23,6 +23,7 @@ distribution.
 
 #pragma once
 
+#include <istream>
 #include <sstream>
 
 #include "Endian.h"

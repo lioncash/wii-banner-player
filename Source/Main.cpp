@@ -21,27 +21,25 @@ misrepresented as being the original software.
 distribution.
 */
 
-#include <iostream>
-#include <fstream>
+#include <GL/glew.h>
+#include <SFML/Window.hpp>
+
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <list>
 #include <map>
-#include <vector>
 #include <sstream>
 #include <string>
+#include <vector>
 
 // hax
 //#define WIN32_LEAN_AND_MEAN
 //#define _WINUSER_
 
-#include "QueueThread.h"
-
 #include "Banner.h"
+#include "QueueThread.h"
 #include "Types.h"
-
-#include <GL/glew.h>
-
-#include <SFML/Window.hpp>
 
 #define NO_CONSOLE 0
 

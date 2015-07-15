@@ -23,6 +23,7 @@ distribution.
 
 #pragma once
 
+#include <istream>
 #include <list>
 #include <vector>
 

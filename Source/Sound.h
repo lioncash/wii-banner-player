@@ -23,6 +23,8 @@ distribution.
 
 #pragma once
 
+#include <istream>
+
 namespace WiiBanner
 {
 

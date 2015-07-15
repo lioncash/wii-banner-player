@@ -23,8 +23,9 @@ distribution.
 
 #pragma once
 
-#include <map>
 #include <cstring>
+#include <istream>
+#include <map>
 
 #include "Types.h"
 

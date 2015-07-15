@@ -23,8 +23,8 @@ distribution.
 
 #include <GL/glew.h>
 
-#include "Window.h"
 #include "Endian.h"
+#include "Window.h"
 
 namespace WiiBanner
 {

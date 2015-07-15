@@ -25,11 +25,11 @@ distribution.
 
 #include <GL/glew.h>
 
+#include "Endian.h"
 #include "Layout.h"
 #include "Picture.h"
 #include "Textbox.h"
 #include "Window.h"
-#include "Endian.h"
 
 namespace WiiBanner
 {

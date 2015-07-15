@@ -23,12 +23,11 @@ distribution.
 
 #pragma once
 
-#include <map>
-#include <functional>
-
-#include <thread>
-#include <mutex>
 #include <condition_variable>
+#include <functional>
+#include <map>
+#include <mutex>
+#include <thread>
 
 // from dolphin
 #include "FifoQueue.h"

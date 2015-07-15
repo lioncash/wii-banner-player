@@ -23,6 +23,8 @@ distribution.
 
 #pragma once
 
+#include <string>
+
 #include "Layout.h"
 #include "Sound.h"
 

@@ -28,13 +28,14 @@ distribution.
 // hax
 #define WIN32_LEAN_AND_MEAN
 #define _WINUSER_
+
 // from dolphin
 #include "FileHandlerARC.h"
 
 #include "Banner.h"
+#include "Endian.h"
 #include "LZ77.h"
 #include "Sound.h"
-#include "Endian.h"
 #include "Types.h"
 
 namespace WiiBanner

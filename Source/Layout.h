@@ -23,14 +23,16 @@ distribution.
 
 #pragma once
 
+#include <istream>
 #include <map>
 #include <list>
+#include <string>
 #include <vector>
 
-#include "Pane.h"
-#include "Material.h"
-#include "Texture.h"
 #include "Font.h"
+#include "Material.h"
+#include "Pane.h"
+#include "Texture.h"
 #include "Types.h"
 
 namespace WiiBanner

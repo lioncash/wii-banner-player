@@ -23,9 +23,9 @@ distribution.
 
 #include <GL/glew.h>
 
-#include "Material.h"
 #include "Endian.h"
 #include "Funcs.h"
+#include "Material.h"
 
 namespace WiiBanner
 {

@@ -21,17 +21,17 @@ misrepresented as being the original software.
 distribution.
 */
 
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
 #include <SFML/Audio.hpp>
 
 // from dolphin
 #include "CommonTypes.h"
 
-#include "Sound.h"
-#include "LZ77.h"
 #include "Endian.h"
+#include "LZ77.h"
+#include "Sound.h"
 #include "Types.h"
 
 namespace WiiBanner

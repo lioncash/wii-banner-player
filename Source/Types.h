@@ -23,12 +23,11 @@ distribution.
 
 #pragma once
 
-#include <stdint.h>
-#include <string>
-#include <iostream>
 #include <algorithm>
-#include <type_traits>
 #include <cstdint>
+#include <iostream>
+#include <type_traits>
+#include <string>
 
 #include "CommonTypes.h"
 

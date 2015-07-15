@@ -21,8 +21,8 @@ misrepresented as being the original software.
 distribution.
 */
 
-#include "Font.h"
 #include "Endian.h"
+#include "Font.h"
 
 namespace WiiBanner
 {

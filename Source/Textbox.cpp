@@ -21,12 +21,12 @@ misrepresented as being the original software.
 distribution.
 */
 
-#include <GL/glew.h>
 #include <cstring>
+#include <GL/glew.h>
 
-#include "Textbox.h"
-#include "Layout.h"
 #include "Endian.h"
+#include "Layout.h"
+#include "Textbox.h"
 
 namespace WiiBanner
 {
