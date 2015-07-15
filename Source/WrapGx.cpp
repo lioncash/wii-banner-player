@@ -356,8 +356,12 @@ void GX_SetAlphaCompare(u8 comp0, u8 ref0, u8 aop, u8 comp1, u8 ref1)
 struct TevStageProps
 {
 	TevStageProps()
+		: color_a(0), color_b(0), color_c(0), color_d(0),
+		  alpha_a(0), alpha_b(0), alpha_c(0), alpha_d(0),
+		  color_op(0), alpha_op(0),
+		  color_regid(0), alpha_regid(0),
+		  pad(0), texcoord(0), texmap(0)
 	{
-		memset(this, 0, sizeof(*this));
 	}
 
 	// color inputs
@@ -389,7 +393,39 @@ struct TevStageProps
 
 	bool operator<(const TevStageProps& rhs) const
 	{
-		return memcmp(this, &rhs, sizeof(*this)) < 0;
+		if (color_a != rhs.color_a)
+			return color_a < rhs.color_a;
+		if (color_b != rhs.color_b)
+			return color_b < rhs.color_b;
+		if (color_c != rhs.color_c)
+			return color_c < rhs.color_c;
+		if (color_d != rhs.color_d)
+			return color_d < rhs.color_d;
+
+		if (alpha_a != rhs.alpha_a)
+			return alpha_a < rhs.alpha_a;
+		if (alpha_b != rhs.alpha_b)
+			return alpha_b < rhs.alpha_b;
+		if (alpha_c != rhs.alpha_c)
+			return alpha_c < rhs.alpha_c;
+		if (alpha_d != rhs.alpha_d)
+			return alpha_d < rhs.alpha_d;
+
+		if (color_op != rhs.color_op)
+			return color_op < rhs.color_op;
+		if (alpha_op != rhs.alpha_op)
+			return alpha_op < rhs.alpha_op;
+
+		if (color_regid != rhs.color_regid)
+			return color_regid < rhs.color_regid;
+		if (alpha_regid != rhs.alpha_regid)
+			return alpha_regid < rhs.alpha_regid;
+
+		if (texcoord != rhs.texcoord)
+			return texcoord < rhs.texcoord;
+
+		// Last member we care about.
+		return texmap < rhs.texmap;
 	}
 };
 
