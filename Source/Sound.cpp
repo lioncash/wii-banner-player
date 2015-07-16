@@ -23,6 +23,8 @@ distribution.
 
 #include <cstring>
 #include <iostream>
+#include <memory>
+#include <utility>
 
 #include <SFML/Audio.hpp>
 
@@ -361,24 +363,16 @@ bool BannerStream::OnGetData(sf::SoundStream::Chunk& chunk)
 	return true;
 }
 
-Sound::~Sound()
-{
-	delete stream;
-}
-
 bool Sound::Load(std::istream& file)
 {
-	auto* const s = new BannerStream;
+	std::unique_ptr<BannerStream> s(new BannerStream);
 	if (s->Load(file))
 	{
-		stream = s;
+		stream = std::move(s);
 		return true;
 	}
-	else
-	{
-		delete s;
-		return false;
-	}
+
+	return false;
 }
 
 void Sound::Play()

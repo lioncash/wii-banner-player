@@ -24,6 +24,7 @@ distribution.
 #pragma once
 
 #include <istream>
+#include <memory>
 
 namespace WiiBanner
 {
@@ -34,7 +35,6 @@ class Sound
 {
 public:
 	Sound() : stream(nullptr) {}
-	~Sound();
 
 	bool Load(std::istream& file);
 
@@ -44,7 +44,7 @@ public:
 	void Restart();
 
 private:
-	BannerStream* stream;
+	std::unique_ptr<BannerStream> stream;
 };
 
 }
