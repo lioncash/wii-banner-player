@@ -63,7 +63,7 @@ private:
 	size_t BuildFilenames(const size_t first_index, const size_t last_index,
 		std::istream& file, const char* directory = "");
 
-	const SFileInfo* FindFileInfo(std::string _rFullPath) const;
+	const SFileInfo* FindFileInfo(const std::string& full_path) const;
 };
 
 } // namespace

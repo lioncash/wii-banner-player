@@ -340,14 +340,12 @@ size_t CARCFile::BuildFilenames(const size_t _FirstIndex, const size_t _LastInde
 }
 
 
-const SFileInfo* CARCFile::FindFileInfo(std::string _rFullPath) const
+const SFileInfo* CARCFile::FindFileInfo(const std::string& full_path) const
 {
 	for (size_t i = 0; i < m_FileInfoVector.size(); i++)
 	{
-		if (!strcasecmp(m_FileInfoVector[i].m_FullPath, _rFullPath.c_str()))
-		{
-			return(&m_FileInfoVector[i]);
-		}
+		if (!strcasecmp(m_FileInfoVector[i].m_FullPath, full_path.c_str()))
+			return &m_FileInfoVector[i];
 	}
 
 	return nullptr;
