@@ -18,24 +18,12 @@
 #pragma once
 
 #include <string>
-#include <vector>
-
 #include "CommonTypes.h"
 
 namespace File
 {
 
-// FileSystem tree node
-struct FSTEntry
-{
-	bool isDirectory;
-	u64 size;                 // File length or number of entries from children
-	std::string physicalName; // Name on disk
-	std::string virtualName;  // Name in FST names table
-	std::vector<FSTEntry> children;
-};
-
 // Returns the size of filename (64bit)
 u64 GetSize(const std::string& filename);
 
-}  // namespace
+}
