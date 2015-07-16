@@ -204,9 +204,7 @@ void Material::Load(std::istream& file)
 	if (!flags.tev_stage)
 	{
 		// Set up defaults, this seems dumb/wrong
-
-		TevStage tev;
-		memset(tev.data, 0, sizeof(tev.data));
+		TevStage tev = {};
 
 		// 1st stage
 		tev.color_in.a = 2;
