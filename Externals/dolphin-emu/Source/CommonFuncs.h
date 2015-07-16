@@ -20,17 +20,9 @@
 #include "CommonTypes.h"
 
 #ifdef _WIN32
-
 #define NOMINMAX
 #include <Windows.h>
-
-#define SLEEP(x) Sleep(x)
-#else
-#define SLEEP(x) usleep(x*1000)
 #endif
-
-template <bool> struct CompileTimeAssert;
-template<> struct CompileTimeAssert<true> {};
 
 #if defined __GNUC__ && !defined __SSSE3__
 #include <emmintrin.h>
@@ -47,47 +39,10 @@ _mm_shuffle_epi8(__m128i a, __m128i mask)
 
 #ifndef _WIN32
 
-#include <errno.h>
+#include <cerrno>
 #ifdef __linux__
 #include <byteswap.h>
-#else
-char * strndup(char const *s, size_t n);
-size_t strnlen(const char *s, size_t n);
 #endif
-
-// go to debugger mode
-	#ifdef GEKKO
-		#define Crash()
-	#else
-		#define Crash() {asm ("int $3");}
-	#endif
-	#define ARRAYSIZE(A) (sizeof(A)/sizeof((A)[0]))
-
-inline u32 _rotl(u32 x, int shift)
-{
-	shift &= 31;
-	if (!shift) return x;
-	return (x << shift) | (x >> (32 - shift));
-}
-
-inline u64 _rotl64(u64 x, unsigned int shift)
-{
-	unsigned int n = shift % 64;
-	return (x << n) | (x >> (64 - n));
-}
-
-inline u32 _rotr(u32 x, int shift)
-{
-	shift &= 31;
-	if (!shift) return x;
-	return (x >> shift) | (x << (32 - shift));
-}
-
-inline u64 _rotr64(u64 x, unsigned int shift)
-{
-	unsigned int n = shift % 64;
-	return (x >> n) | (x << (64 - n));
-}
 
 #else // WIN32
 // Function Cross-Compatibility
@@ -105,31 +60,7 @@ char* strndup (char const *s, size_t n);
 	#define stat64 _stat64
 	#define fstat64 _fstat64
 	#define fileno _fileno
-
-	#if _M_IX86
-		#define Crash() {__asm int 3}
-	#else
-extern "C" {
-	__declspec(dllimport) void __stdcall DebugBreak(void);
-}
-		#define Crash() {DebugBreak();}
-	#endif // M_IX86
 #endif // WIN32 ndef
-
-// Dolphin's min and max functions
-#undef min
-#undef max
-
-template<class T>
-inline T min(const T& a, const T& b) {return a > b ? b : a;}
-template<class T>
-inline T max(const T& a, const T& b) {return a > b ? a : b;}
-
-// Generic function to get last error message.
-// Call directly after the command or use the error num.
-// This function might change the error code.
-// Defined in Misc.cpp.
-const char* GetLastErrorMsg();
 
 namespace Common
 {

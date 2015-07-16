@@ -15,6 +15,7 @@
 // Official SVN repository and contact information can be found at
 // http://code.google.com/p/dolphin-emu/
 
+#include <algorithm>
 #include "CommonFuncs.h"
 
 //#include "VideoCommon.h" // to get debug logs
@@ -1127,8 +1128,8 @@ PC_TexFormat TexDecoder_Decode(u8 *dst, const u8 *src, int width, int height, in
 	if ((!TexFmt_Overlay_Enable)|| (retval == PC_TEX_FMT_NONE))
 		return retval;
 
-	int w = min(width, 40);
-	int h = min(height, 10);
+	int w = std::min(width, 40);
+	int h = std::min(height, 10);
 
 	int xoff = (width - w) >> 1;
 	int yoff = (height - h) >> 1;
