@@ -36,7 +36,7 @@ public:
 
 	virtual ~CARCFile();
 
-	bool IsInitialized();
+	bool IsInitialized() const;
 
 	size_t GetFileSize(const std::string& _rFullPath) const;
 	size_t GetFileOffset(const std::string& _rFullPath) const;

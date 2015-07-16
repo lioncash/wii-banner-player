@@ -29,43 +29,43 @@ namespace DiscIO
 {
 
 CARCFile::CARCFile(std::istream& file)
-    : m_pBuffer(NULL)
-    , m_Initialized(false)
+	: m_pBuffer(nullptr)
+	, m_Initialized(false)
 {
 	// get size, lame;
 	//file.seekg(0, std::ios::end);
 	//u64 file_size = file.tellg();
 
-   // m_pBuffer = new u8[file_size];
+	// m_pBuffer = new u8[file_size];
 	//file.seekg(0, std::ios::beg);
-    //file.read((char*)m_pBuffer, file_size);
+	//file.read((char*)m_pBuffer, file_size);
 
-    //m_Initialized = ParseBuffer();
+	//m_Initialized = ParseBuffer();
 	m_Initialized = ParseBuffer(file);
 }
 
 CARCFile::CARCFile(const std::string& _rFilename)
-    : m_pBuffer(NULL)
-    , m_Initialized(false)
-{
-    DiscIO::IBlobReader* pReader = DiscIO::CreateBlobReader(_rFilename.c_str());
-    if (pReader != NULL)
-    {
-        u64 FileSize = pReader->GetDataSize();
-        m_pBuffer = new u8[(u32)FileSize];
-        pReader->Read(0, FileSize, m_pBuffer);
-        delete pReader;
-
-        m_Initialized = ParseBuffer();
-    }
-}
-
-CARCFile::CARCFile(const std::string& _rFilename, u32 offset)
-	: m_pBuffer(NULL)
+	: m_pBuffer(nullptr)
 	, m_Initialized(false)
 {
 	DiscIO::IBlobReader* pReader = DiscIO::CreateBlobReader(_rFilename.c_str());
-	if (pReader != NULL)
+	if (pReader != nullptr)
+	{
+		u64 FileSize = pReader->GetDataSize();
+		m_pBuffer = new u8[(u32)FileSize];
+		pReader->Read(0, FileSize, m_pBuffer);
+		delete pReader;
+
+		m_Initialized = ParseBuffer();
+	}
+}
+
+CARCFile::CARCFile(const std::string& _rFilename, u32 offset)
+	: m_pBuffer(nullptr)
+	, m_Initialized(false)
+{
+	DiscIO::IBlobReader* pReader = DiscIO::CreateBlobReader(_rFilename.c_str());
+	if (pReader != nullptr)
 	{
 		u64 FileSize = pReader->GetDataSize() - offset;
 		m_pBuffer = new u8[(u32)FileSize];
@@ -77,7 +77,7 @@ CARCFile::CARCFile(const std::string& _rFilename, u32 offset)
 }
 
 CARCFile::CARCFile(const u8* _pBuffer, size_t _BufferSize)
-	: m_pBuffer(NULL)
+	: m_pBuffer(nullptr)
 	, m_Initialized(false)
 {
 	m_pBuffer = new u8[_BufferSize];
@@ -89,38 +89,28 @@ CARCFile::CARCFile(const u8* _pBuffer, size_t _BufferSize)
 	}
 }
 
-
 CARCFile::~CARCFile()
 {
 	delete [] m_pBuffer;
 }
 
-
-bool
-CARCFile::IsInitialized()
+bool CARCFile::IsInitialized() const
 {
-	return(m_Initialized);
+	return m_Initialized;
 }
 
-
-size_t
-CARCFile::GetFileSize(const std::string& _rFullPath) const
+size_t CARCFile::GetFileSize(const std::string& _rFullPath) const
 {
 	if (!m_Initialized)
-	{
-		return(0);
-	}
+		return 0;
 
 	const SFileInfo* pFileInfo = FindFileInfo(_rFullPath);
 
-	if (pFileInfo != NULL)
-	{
-		return((size_t) pFileInfo->m_FileSize);
-	}
+	if (pFileInfo != nullptr)
+		return (size_t) pFileInfo->m_FileSize;
 
-	return(0);
+	return 0;
 }
-
 
 size_t CARCFile::GetFileOffset(const std::string& _rFullPath) const
 {
@@ -128,70 +118,51 @@ size_t CARCFile::GetFileOffset(const std::string& _rFullPath) const
 		return 0;
 
 	const SFileInfo* const pFileInfo = FindFileInfo(_rFullPath);
-
 	if (pFileInfo)
 		return (size_t)pFileInfo->m_Offset;
 
-	return(0);
+	return 0;
 }
 
-size_t
-CARCFile::ReadFile(const std::string& _rFullPath, u8* _pBuffer, size_t _MaxBufferSize)
+size_t CARCFile::ReadFile(const std::string& _rFullPath, u8* _pBuffer, size_t _MaxBufferSize)
 {
 	if (!m_Initialized)
-	{
-		return(0);
-	}
+		return 0;
 
 	const SFileInfo* pFileInfo = FindFileInfo(_rFullPath);
-
-	if (pFileInfo == NULL)
-	{
-		return(0);
-	}
+	if (pFileInfo == nullptr)
+		return 0;
 
 	if (pFileInfo->m_FileSize > _MaxBufferSize)
-	{
-		return(0);
-	}
+		return 0;
 
 	memcpy(_pBuffer, &m_pBuffer[pFileInfo->m_Offset], (size_t)pFileInfo->m_FileSize);
-	return((size_t) pFileInfo->m_FileSize);
+	return (size_t) pFileInfo->m_FileSize;
 }
 
 
-bool
-CARCFile::ExportFile(const std::string& _rFullPath, const std::string& _rExportFilename)
+bool CARCFile::ExportFile(const std::string& _rFullPath, const std::string& _rExportFilename)
 {
 	if (!m_Initialized)
-	{
-		return(false);
-	}
+		return false;
 
 	const SFileInfo* pFileInfo = FindFileInfo(_rFullPath);
-
-	if (pFileInfo == NULL)
-	{
-		return(false);
-	}
+	if (pFileInfo == nullptr)
+		return false;
 
 	FILE* pFile = fopen(_rExportFilename.c_str(), "wb");
-
-	if (pFile == NULL)
-	{
-		return(false);
-	}
+	if (pFile == nullptr)
+		return false;
 
 	fwrite(&m_pBuffer[pFileInfo->m_Offset], (size_t) pFileInfo->m_FileSize, 1, pFile);
 	fclose(pFile);
-	return(true);
+	return true;
 }
 
 
-bool
-CARCFile::ExportAllFiles(const std::string&)
+bool CARCFile::ExportAllFiles(const std::string&)
 {
-	return(false);
+	return false;
 }
 
 bool CARCFile::ParseBuffer(std::istream& file)
@@ -247,8 +218,7 @@ bool CARCFile::ParseBuffer(std::istream& file)
 	return(true);
 }
 
-bool
-CARCFile::ParseBuffer()
+bool CARCFile::ParseBuffer()
 {
 	// check ID
 	u32 ID = Common::swap32(*(u32*)(m_pBuffer));
@@ -282,10 +252,10 @@ CARCFile::ParseBuffer()
 			szNameTable += 0xC;
 		}
 
-		BuildFilenames(1, m_FileInfoVector.size(), NULL, szNameTable);
+		BuildFilenames(1, m_FileInfoVector.size(), nullptr, szNameTable);
 	}
 
-	return(true);
+	return true;
 }
 
 size_t CARCFile::BuildFilenames(const size_t first_index, const size_t last_index,
@@ -326,8 +296,7 @@ size_t CARCFile::BuildFilenames(const size_t first_index, const size_t last_inde
 	return current_index;
 }
 
-size_t
-CARCFile::BuildFilenames(const size_t _FirstIndex, const size_t _LastIndex, const char* _szDirectory, const char* _szNameTable)
+size_t CARCFile::BuildFilenames(const size_t _FirstIndex, const size_t _LastIndex, const char* _szDirectory, const char* _szNameTable)
 {
 	size_t CurrentIndex = _FirstIndex;
 
@@ -340,7 +309,7 @@ CARCFile::BuildFilenames(const size_t _FirstIndex, const size_t _LastIndex, cons
 		if (rFileInfo.IsDirectory())
 		{
 			// this is a directory, build up the new szDirectory
-			if (_szDirectory != NULL)
+			if (_szDirectory != nullptr)
 			{
 				sprintf(rFileInfo.m_FullPath, "%s%s/", _szDirectory, &_szNameTable[uOffset]);
 			}
@@ -354,7 +323,7 @@ CARCFile::BuildFilenames(const size_t _FirstIndex, const size_t _LastIndex, cons
 		else
 		{
 			// this is a filename
-			if (_szDirectory != NULL)
+			if (_szDirectory != nullptr)
 			{
 				sprintf(rFileInfo.m_FullPath, "%s%s", _szDirectory, &_szNameTable[uOffset]);
 			}
@@ -367,12 +336,11 @@ CARCFile::BuildFilenames(const size_t _FirstIndex, const size_t _LastIndex, cons
 		}
 	}
 
-	return(CurrentIndex);
+	return CurrentIndex;
 }
 
 
-const SFileInfo*
-CARCFile::FindFileInfo(std::string _rFullPath) const
+const SFileInfo* CARCFile::FindFileInfo(std::string _rFullPath) const
 {
 	for (size_t i = 0; i < m_FileInfoVector.size(); i++)
 	{
@@ -382,6 +350,6 @@ CARCFile::FindFileInfo(std::string _rFullPath) const
 		}
 	}
 
-	return(NULL);
+	return nullptr;
 }
 } // namespace
