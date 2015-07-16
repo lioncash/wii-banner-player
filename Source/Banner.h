@@ -23,6 +23,7 @@ distribution.
 
 #pragma once
 
+#include <memory>
 #include <string>
 
 #include "Layout.h"
@@ -31,15 +32,14 @@ distribution.
 namespace WiiBanner
 {
 
-class Banner
+class Banner final
 {
 public:
 	Banner(const std::string& filename);
-	~Banner();
 
-	Layout* GetBanner() const { return layout_banner; }
-	Layout* GetIcon() const { return layout_icon; }
-	Sound* GetSound() const { return sound; }
+	Layout* GetBanner() const { return layout_banner.get(); }
+	Layout* GetIcon() const { return layout_icon.get(); }
+	Sound* GetSound() const { return sound.get(); }
 
 	void LoadBanner();
 	
@@ -47,14 +47,14 @@ public:
 	void LoadIcon()
 	{
 		if (offset_icon && !layout_icon)
-			layout_icon = LoadLayout("Icon", offset_icon, Vec2f(128.f, 96.f));
+			layout_icon.reset(LoadLayout("Icon", offset_icon, Vec2f(128.f, 96.f)));
 	}
 
 	void LoadSound();
 
-	void UnloadBanner() { delete layout_banner; layout_banner = nullptr; }
-	void UnloadIcon() { delete layout_icon; layout_icon = nullptr; }
-	void UnloadSound() { delete sound; sound = nullptr; }
+	void UnloadBanner() { layout_banner.reset(); }
+	void UnloadIcon()   { layout_icon.reset(); }
+	void UnloadSound()  { sound.reset(); }
 
 private:
 	Layout* LoadLayout(const std::string& lyt_name, std::streamoff offset, Vec2f size);
@@ -64,9 +64,9 @@ private:
 	std::streamoff offset_sound;
 	std::streamoff header_bytes;
 
-	Layout* layout_banner;
-	Layout* layout_icon;
-	Sound* sound;
+	std::unique_ptr<Layout> layout_banner;
+	std::unique_ptr<Layout> layout_icon;
+	std::unique_ptr<Sound>  sound;
 
 	const std::string filename;
 };

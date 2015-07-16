@@ -22,6 +22,8 @@ distribution.
 */
 
 #include <fstream>
+#include <memory>
+#include <utility>
 
 #include <GL/glew.h>
 
@@ -172,7 +174,7 @@ Banner::Banner(const std::string& _filename)
 void Banner::LoadBanner()
 {
 	if (offset_banner && !layout_banner)
-		layout_banner = LoadLayout("Banner", offset_banner, Vec2f(608.f, 456.f));
+		layout_banner.reset(LoadLayout("Banner", offset_banner, Vec2f(608.f, 456.f)));
 }
 
 /*
@@ -190,11 +192,10 @@ void Banner::LoadSound()
 		std::ifstream bnr_file(filename, std::ios::binary | std::ios::in);
 
 		bnr_file.seekg(header_bytes + offset_sound, std::ios::beg);
-		auto* const s = new Sound;
+
+		std::unique_ptr<Sound> s(new Sound);
 		if (s->Load(bnr_file))
-			sound = s;
-		else
-			delete s;
+			sound = std::move(s);
 	}
 }
 
@@ -288,13 +289,6 @@ Layout* Banner::LoadLayout(const std::string& lyt_name, std::streamoff offset, V
 	layout->SetFrame(0);
 
 	return layout;
-}
-
-Banner::~Banner()
-{
-	UnloadBanner();
-	UnloadIcon();
-	UnloadSound();
 }
 
 }
