@@ -29,6 +29,7 @@ distribution.
 #include <map>
 #include <set>
 #include <sstream>
+#include <tuple>
 #include <vector>
 
 // from dolphin
@@ -395,39 +396,17 @@ struct TevStageProps
 
 	bool operator<(const TevStageProps& rhs) const
 	{
-		if (color_a != rhs.color_a)
-			return color_a < rhs.color_a;
-		if (color_b != rhs.color_b)
-			return color_b < rhs.color_b;
-		if (color_c != rhs.color_c)
-			return color_c < rhs.color_c;
-		if (color_d != rhs.color_d)
-			return color_d < rhs.color_d;
+		auto l = std::tie(color_a, color_b, color_c, color_d,
+		                  alpha_a, alpha_b, alpha_c, alpha_d,
+		                  color_op, alpha_op, color_regid, alpha_regid,
+		                  texcoord, texmap);
 
-		if (alpha_a != rhs.alpha_a)
-			return alpha_a < rhs.alpha_a;
-		if (alpha_b != rhs.alpha_b)
-			return alpha_b < rhs.alpha_b;
-		if (alpha_c != rhs.alpha_c)
-			return alpha_c < rhs.alpha_c;
-		if (alpha_d != rhs.alpha_d)
-			return alpha_d < rhs.alpha_d;
+		auto r = std::tie(rhs.color_a, rhs.color_b, rhs.color_c, rhs.color_d,
+		                  rhs.alpha_a, rhs.alpha_b, rhs.alpha_c, rhs.alpha_d,
+		                  rhs.color_op, rhs.alpha_op, rhs.color_regid, rhs.alpha_regid,
+		                  rhs.texcoord, rhs.texmap);
 
-		if (color_op != rhs.color_op)
-			return color_op < rhs.color_op;
-		if (alpha_op != rhs.alpha_op)
-			return alpha_op < rhs.alpha_op;
-
-		if (color_regid != rhs.color_regid)
-			return color_regid < rhs.color_regid;
-		if (alpha_regid != rhs.alpha_regid)
-			return alpha_regid < rhs.alpha_regid;
-
-		if (texcoord != rhs.texcoord)
-			return texcoord < rhs.texcoord;
-
-		// Last member we care about.
-		return texmap < rhs.texmap;
+		return l < r;
 	}
 };
 

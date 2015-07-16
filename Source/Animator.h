@@ -26,6 +26,7 @@ distribution.
 #include <cstring>
 #include <istream>
 #include <map>
+#include <tuple>
 
 #include "Types.h"
 
@@ -56,7 +57,7 @@ struct KeyType
 
 	bool operator<(const KeyType& rhs) const
 	{
-		return memcmp(this, &rhs, sizeof(*this)) < 0;
+		return std::tie(type, index, target) < std::tie(rhs.type, rhs.index, rhs.target);
 	}
 
 	const AnimationType type;
