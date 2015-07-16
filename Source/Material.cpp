@@ -144,7 +144,10 @@ void Material::Load(std::istream& file)
 	}
 	else
 	{
-		memset(&color.r, 0xff, 4);
+		color.r = 0xFF;
+		color.g = 0xFF;
+		color.b = 0xFF;
+		color.a = 0xFF;
 	}
 
 	// TEV swap table
