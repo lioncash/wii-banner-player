@@ -225,40 +225,6 @@ struct BNS
 	}
 };
 
-class BannerStream : public sf::SoundStream
-{
-public:
-	BannerStream() : position(0), loop_position(-1) {}
-
-	bool Load(std::istream& file);
-
-	void Restart() { Stop(); position = 0; }
-
-private:
-	virtual bool OnStart() override;
-	virtual bool OnGetData(sf::SoundStream::Chunk& Data) override;
-
-	virtual void OnSeek(sf::Uint32)
-	{
-		// TODO:
-	}
-
-	std::vector<sf::Int16> samples;
-	std::size_t position;
-	std::size_t loop_position; // -1 means don't loop
-
-	// Size of audio chunks to stream
-	static const std::size_t buffer_size = 40000;
-
-	enum SoundFormat
-	{
-		FORMAT_BNS,
-		FORMAT_WAV,
-		FORMAT_AIFF
-	};
-	SoundFormat format;
-};
-
 bool BannerStream::Load(std::istream& file)
 {
 	BNS bns_file;
