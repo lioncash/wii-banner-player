@@ -54,7 +54,7 @@ public:
 	virtual ~Pane();
 
 	void Render(const Resources& resources, u8 parent_alpha, Vec2f adjust) const;
-	void SetFrame(FrameNumber frame, u8 key_set);
+	void SetFrame(FrameNumber frame, u8 key_set) override;
 
 	bool GetVisible() const { return GetBit(flags, FLAG_VISIBLE); }
 	void SetVisible(bool visible) { SetBit(flags, FLAG_VISIBLE, visible); }
