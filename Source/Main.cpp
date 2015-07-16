@@ -388,7 +388,7 @@ int main(int argc, char* argv[])
 	while (window.IsOpened())
 	{
 		sf::Event ev;
-		while (window.PollEvent(ev))
+		while (window.GetEvent(ev))
 		{
 			switch (ev.Type)
 			{
@@ -462,7 +462,7 @@ int main(int argc, char* argv[])
 				switch (ev.Key.Code)
 				{
 					// Reload all tiles
-				case sf::Keyboard::Back:
+				case sf::Key::Back:
 					g_worker.Clear();
 					full_banner = nullptr;
 					for (Tile* tile : g_tiles)
@@ -472,12 +472,12 @@ int main(int argc, char* argv[])
 					break;
 
 					// Pause resume playback
-				case sf::Keyboard::Space:
+				case sf::Key::Space:
 					banner_play ^= true;
 					break;
 
 					// Exit app
-				case sf::Keyboard::Escape:
+				case sf::Key::Escape:
 					window.Close();
 					break;
 				}
