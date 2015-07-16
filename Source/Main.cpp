@@ -436,10 +436,14 @@ int main(int argc, char* argv[])
 							});
 						}
 						else
+						{
 							std::swap(tile_dest->position, tile_selected->position);
+						}
 					}
 					else
+					{
 						tile_selected->position = dest;
+					}
 
 					tile_selected = nullptr;
 				}
