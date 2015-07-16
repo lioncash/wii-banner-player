@@ -38,7 +38,7 @@ public:
 	void Load(std::istream& file);
 
 private:
-	void Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const;
+	void Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const override;
 
 	u16 material_index;
 	u16 font_index;

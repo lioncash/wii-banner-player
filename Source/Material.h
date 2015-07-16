@@ -46,8 +46,8 @@ public:
 	void Apply(const TextureList& textures) const;
 
 protected:
-	void ProcessHermiteKey(const KeyType& type, float value);
-	void ProcessStepKey(const KeyType& type, StepKeyHandler::KeyData data);
+	void ProcessHermiteKey(const KeyType& type, float value) override;
+	void ProcessStepKey(const KeyType& type, StepKeyHandler::KeyData data) override;
 
 private:
 	struct TextureMap

@@ -94,8 +94,8 @@ public:
 	PaneList panes;
 
 protected:
-	void ProcessHermiteKey(const KeyType& type, float value);
-	void ProcessStepKey(const KeyType& type, StepKeyHandler::KeyData data);
+	void ProcessHermiteKey(const KeyType& type, float value) override;
+	void ProcessStepKey(const KeyType& type, StepKeyHandler::KeyData data) override;
 
 private:
 	virtual void Draw(const Resources&, u8, Vec2f) const {};
@@ -136,9 +136,9 @@ public:
 protected:
 	Quad() {}
 
-	void ProcessHermiteKey(const KeyType& type, float value);
+	void ProcessHermiteKey(const KeyType& type, float value) override;
 
-	void Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const;
+	void Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const override;
 
 private:
 	struct TexCoords
