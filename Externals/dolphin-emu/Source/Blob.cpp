@@ -119,7 +119,7 @@ bool SectorReader::ReadMultipleAlignedBlocks(u64 block_num, u64 num_blocks, u8 *
 	return true;
 }
 
-IBlobReader* CreateBlobReader(const char* filename)
+IBlobReader* CreateBlobReader(const std::string& filename)
 {
 	//if (!File::Exists(filename))
 		//return 0;

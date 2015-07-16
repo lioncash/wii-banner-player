@@ -22,7 +22,7 @@
 namespace File
 {
 // Returns the size of filename (64bit)
-u64 GetSize(const char *filename)
+u64 GetSize(const std::string& filename)
 {
 	std::ifstream file(filename);
 	file.seekg(0, std::ios::end);
@@ -34,13 +34,13 @@ u64 GetSize(const char *filename)
 namespace DiscIO
 {
 
-PlainFileReader::PlainFileReader(const char* filename)
+PlainFileReader::PlainFileReader(const std::string& filename)
 {
 	file.open(filename, std::ios::in | std::ios::binary);
 	size = File::GetSize(filename);
 }
 
-PlainFileReader* PlainFileReader::Create(const char* filename)
+PlainFileReader* PlainFileReader::Create(const std::string& filename)
 {
 	return new PlainFileReader(filename);
 }

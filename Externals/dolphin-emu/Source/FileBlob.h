@@ -18,6 +18,7 @@
 #pragma once
 
 #include <fstream>
+#include <string>
 #include "Blob.h"
 
 namespace DiscIO
@@ -26,11 +27,11 @@ namespace DiscIO
 class PlainFileReader : public IBlobReader
 {
 	std::fstream file;
-	PlainFileReader(const char* filename);
+	PlainFileReader(const std::string& filename);
 	s64 size;
 
 public:
-	static PlainFileReader* Create(const char* filename);
+	static PlainFileReader* Create(const std::string& filename);
 	~PlainFileReader();
 	u64 GetDataSize() const override { return size; }
 	u64 GetRawSize() const override { return size; }

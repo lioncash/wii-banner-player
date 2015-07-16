@@ -36,6 +36,6 @@ struct FSTEntry
 };
 
 // Returns the size of filename (64bit)
-u64 GetSize(const char* filename);
+u64 GetSize(const std::string& filename);
 
 }  // namespace

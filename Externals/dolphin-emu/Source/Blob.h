@@ -25,6 +25,7 @@
 // detect whether the file is a compressed blob, or just a big hunk of data, or a drive, and
 // automatically do the right thing.
 
+#include <string>
 #include "CommonTypes.h"
 
 namespace DiscIO
@@ -74,7 +75,7 @@ public:
 };
 
 // Factory function - examines the path to choose the right type of IBlobReader, and returns one.
-IBlobReader* CreateBlobReader(const char* filename);
+IBlobReader* CreateBlobReader(const std::string& filename);
 
 typedef void (*CompressCB)(const char* text, float percent, void* arg);
 
