@@ -151,9 +151,9 @@ struct BNS
 			std::cout << "sound.bin appears invalid\n";
 	}
 
-	u8  GetChannelsCount() { return info.channel_count; }
-	u32 GetSamplesCount()  { return info.sample_count * GetChannelsCount(); }
-	u16 GetSampleRate()    { return info.sample_rate; }
+	u8  GetChannelsCount() const { return info.channel_count; }
+	u32 GetSamplesCount()  const { return info.sample_count * GetChannelsCount(); }
+	u16 GetSampleRate()    const { return info.sample_rate; }
 
 	u32 DecodeChannelToPCM(s16 *pcm, u32 pcm_start_pos, u32 adpcm_start_pos, u32 adpcm_end_pos)
 	{
