@@ -184,15 +184,6 @@ void AddTile(Tile* tile)
 	tile->position  = v;
 }
 
-//class CritSecLocker
-//{
-//	CritSecLocker(Common::CriticalSection& _crit) : crit(_crit) { crit.Enter(); };
-//	~CritSecLocker() { crit.Leave(); };
-//
-//private:
-//	Common::CriticalSection& crit;
-//};
-
 Tile* FindTile(const Vec2i& pos)
 {
 	Tile* ret = nullptr;
