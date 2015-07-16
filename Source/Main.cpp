@@ -169,7 +169,7 @@ void AddTile(Tile* tile)
 
 	std::lock_guard<std::mutex> lk(g_tiles_lock);
 
-	Vec2i v(0.f, 0.f);
+	Vec2i v(0, 0);
 	if (!g_tiles.empty())
 	{
 		v = g_tiles.back()->position;
