@@ -40,14 +40,21 @@ public:
 private:
 	void Draw(const Resources& resources, u8 render_alpha, Vec2f adjust) const;
 
-	u16 material_index, font_index;
+	u16 material_index;
+	u16 font_index;
 
-	u8 text_position, text_alignment;
+	u8 text_position;
+	u8 text_alignment;
 
-	GXColor colors[2]; // Top and bottom apparently
+	// Top and bottom apparently
+	GXColor colors[2];
 
-	float width, height; // Character width and height ?
-	float space_char, space_line;
+	// Character width and height ?
+	float width;
+	float height;
+
+	float space_char;
+	float space_line;
 
 	std::wstring text;
 };

@@ -97,9 +97,12 @@ private:
 
 	std::map<std::string, Group> groups;
 
-	FrameNumber frame_current, frame_loop_start, frame_loop_end;
+	FrameNumber frame_current;
+	FrameNumber frame_loop_start;
+	FrameNumber frame_loop_end;
 
-	float width, height;
+	float width;
+	float height;
 	u8 centered;
 };
 

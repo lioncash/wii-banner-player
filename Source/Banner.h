@@ -59,9 +59,13 @@ public:
 private:
 	Layout* LoadLayout(const std::string& lyt_name, std::streamoff offset, Vec2f size);
 
-	std::streamoff offset_banner, offset_icon, offset_sound, header_bytes;
+	std::streamoff offset_banner;
+	std::streamoff offset_icon;
+	std::streamoff offset_sound;
+	std::streamoff header_bytes;
 
-	Layout *layout_banner, *layout_icon;
+	Layout* layout_banner;
+	Layout* layout_icon;
 	Sound* sound;
 
 	const std::string filename;

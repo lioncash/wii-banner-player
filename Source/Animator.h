@@ -60,7 +60,8 @@ struct KeyType
 	}
 
 	const AnimationType type;
-	const u8 index, target;
+	const u8 index;
+	const u8 target;
 };
 
 class StepKeyHandler
