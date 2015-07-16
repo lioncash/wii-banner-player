@@ -39,7 +39,8 @@ void SectorReader::SetSectorSize(int blocksize)
 	m_blocksize = blocksize;
 }
 
-SectorReader::~SectorReader() {
+SectorReader::~SectorReader()
+{
 	for (int i = 0; i < CACHE_SIZE; i++)
 		delete [] cache[i];
 }

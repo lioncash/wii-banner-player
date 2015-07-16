@@ -71,17 +71,9 @@ public:
 	// A pointer returned by GetBlockData is invalidated as soon as GetBlockData, Read, or ReadMultipleAlignedBlocks is called again.
 	const u8* GetBlockData(u64 block_num);
 	bool Read(u64 offset, u64 size, u8* out_ptr) override;
-	friend class DriveReader;
 };
 
 // Factory function - examines the path to choose the right type of IBlobReader, and returns one.
 IBlobReader* CreateBlobReader(const std::string& filename);
-
-typedef void (*CompressCB)(const char* text, float percent, void* arg);
-
-bool CompressFileToBlob(const char* infile, const char *outfile, u32 sub_type = 0, int sector_size = 16384,
-		CompressCB callback = 0, void* arg = 0);
-bool DecompressBlobToFile(const char* infile, const char* outfile,
-		CompressCB callback = 0, void* arg = 0);
 
 }  // namespace
