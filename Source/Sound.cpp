@@ -233,8 +233,8 @@ public:
 	void Restart() { Stop(); position = 0; }
 
 private:
-	virtual bool OnStart();
-	virtual bool OnGetData(sf::SoundStream::Chunk& Data);
+	virtual bool OnStart() override;
+	virtual bool OnGetData(sf::SoundStream::Chunk& Data) override;
 
 	virtual void OnSeek(sf::Uint32)
 	{
