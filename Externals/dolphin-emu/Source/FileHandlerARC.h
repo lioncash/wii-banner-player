@@ -15,8 +15,7 @@
 // Official SVN repository and contact information can be found at
 // http://code.google.com/p/dolphin-emu/
 
-#ifndef _ARC_FILE_H
-#define _ARC_FILE_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -29,46 +28,42 @@ namespace DiscIO
 
 class CARCFile
 {
-	public:
-		CARCFile(std::istream& file);
-        CARCFile(const std::string& _rFilename);
-		CARCFile(const std::string& _rFilename, u32 offset);
-		CARCFile(const u8* _pBuffer, size_t _BufferSize);
+public:
+	CARCFile(std::istream& file);
+	CARCFile(const std::string& _rFilename);
+	CARCFile(const std::string& _rFilename, u32 offset);
+	CARCFile(const u8* _pBuffer, size_t _BufferSize);
 
-		virtual ~CARCFile();
+	virtual ~CARCFile();
 
-		bool IsInitialized();
+	bool IsInitialized();
 
-		size_t GetFileSize(const std::string& _rFullPath) const;
-		size_t GetFileOffset(const std::string& _rFullPath) const;
+	size_t GetFileSize(const std::string& _rFullPath) const;
+	size_t GetFileOffset(const std::string& _rFullPath) const;
 
-		size_t ReadFile(const std::string& _rFullPath, u8* _pBuffer, size_t _MaxBufferSize);
+	size_t ReadFile(const std::string& _rFullPath, u8* _pBuffer, size_t _MaxBufferSize);
 
-		bool ExportFile(const std::string& _rFullPath, const std::string& _rExportFilename);
-		bool ExportAllFiles(const std::string& _rFullPath);
+	bool ExportFile(const std::string& _rFullPath, const std::string& _rExportFilename);
+	bool ExportAllFiles(const std::string& _rFullPath);
 
+private:
 
-	private:
+	u8* m_pBuffer;
 
-		u8* m_pBuffer;
+	bool m_Initialized;
 
-		bool m_Initialized;
+	typedef std::vector<SFileInfo>CFileInfoVector;
+	CFileInfoVector m_FileInfoVector;
 
-		typedef std::vector<SFileInfo>CFileInfoVector;
-		CFileInfoVector m_FileInfoVector;
+	bool ParseBuffer();
+	bool ParseBuffer(std::istream& file);
 
-		bool ParseBuffer();
-		bool ParseBuffer(std::istream& file);
+	size_t BuildFilenames(const size_t _FirstIndex, const size_t _LastIndex,
+		const char* directory, const char* _szNameTable);
+	size_t BuildFilenames(const size_t first_index, const size_t last_index,
+		std::istream& file, const char* directory = "");
 
-		size_t BuildFilenames(const size_t _FirstIndex, const size_t _LastIndex,
-			const char* directory, const char* _szNameTable);
-		size_t BuildFilenames(const size_t first_index, const size_t last_index,
-			std::istream& file, const char* directory = "");
-
-		const SFileInfo* FindFileInfo(std::string _rFullPath) const;
+	const SFileInfo* FindFileInfo(std::string _rFullPath) const;
 };
 
 } // namespace
-
-#endif
-

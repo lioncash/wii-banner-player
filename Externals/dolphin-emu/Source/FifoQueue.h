@@ -1,11 +1,7 @@
+#pragma once
 
-#ifndef _FIFO_QUEUE_H_
-#define _FIFO_QUEUE_H_
-
-// a simple lockless thread-safe,
+// A simple lockless thread-safe,
 // single reader, single writer queue
-
-//#include "Atomic.h"
 
 namespace Common
 {
@@ -110,5 +106,3 @@ private:
 };
 
 }
-
-#endif

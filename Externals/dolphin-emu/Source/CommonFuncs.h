@@ -1,22 +1,21 @@
 // Copyright (C) 2003 Dolphin Project.
-
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, version 2.0.
-
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License 2.0 for more details.
-
+//
 // A copy of the GPL 2.0 should have been included with the program.
 // If not, see http://www.gnu.org/licenses/
-
+//
 // Official SVN repository and contact information can be found at
 // http://code.google.com/p/dolphin-emu/
 
-#ifndef _COMMONFUNCS_H_
-#define _COMMONFUNCS_H_
+#pragma once
 
 #include "CommonTypes.h"
 
@@ -64,24 +63,28 @@ size_t strnlen(const char *s, size_t n);
 	#endif
 	#define ARRAYSIZE(A) (sizeof(A)/sizeof((A)[0]))
 
-inline u32 _rotl(u32 x, int shift) {
-    shift &= 31;
-    if (!shift) return x;
-    return (x << shift) | (x >> (32 - shift));
+inline u32 _rotl(u32 x, int shift)
+{
+	shift &= 31;
+	if (!shift) return x;
+	return (x << shift) | (x >> (32 - shift));
 }
 
-inline u64 _rotl64(u64 x, unsigned int shift){
+inline u64 _rotl64(u64 x, unsigned int shift)
+{
 	unsigned int n = shift % 64;
 	return (x << n) | (x >> (64 - n));
 }
 
-inline u32 _rotr(u32 x, int shift) {
-    shift &= 31;
-    if (!shift) return x;
-    return (x >> shift) | (x << (32 - shift));
+inline u32 _rotr(u32 x, int shift)
+{
+	shift &= 31;
+	if (!shift) return x;
+	return (x >> shift) | (x << (32 - shift));
 }
 
-inline u64 _rotr64(u64 x, unsigned int shift){
+inline u64 _rotr64(u64 x, unsigned int shift)
+{
 	unsigned int n = shift % 64;
 	return (x >> n) | (x << (64 - n));
 }
@@ -160,4 +163,3 @@ inline u64 swap64(const u8* _pData) {return swap64(*(const u64*)_pData);}
 
 }  // Namespace Common
 
-#endif // _COMMONFUNCS_H_
